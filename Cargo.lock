@@ -93,6 +93,8 @@ name = "backend"
 version = "0.1.0"
 dependencies = [
  "axum",
+ "dotenvy",
+ "serde",
  "tokio",
 ]
 
@@ -199,6 +201,12 @@ dependencies = [
  "block-buffer",
  "crypto-common",
 ]
+
+[[package]]
+name = "dotenvy"
+version = "0.15.7"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "1aaf95b3e5c8f23aa320147307562d361db0ae0d51242340f558153b4eb2439b"
 
 [[package]]
 name = "encoding_rs"
@@ -688,6 +696,20 @@ name = "serde"
 version = "1.0.181"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "6d3e73c93c3240c0bda063c239298e633114c69a888c3e37ca8bb33f343e9890"
+dependencies = [
+ "serde_derive",
+]
+
+[[package]]
+name = "serde_derive"
+version = "1.0.181"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "be02f6cb0cd3a5ec20bbcfbcbd749f57daddb1a0882dc2e46a6c236c90b977ed"
+dependencies = [
+ "proc-macro2",
+ "quote",
+ "syn",
+]
 
 [[package]]
 name = "serde_json"
