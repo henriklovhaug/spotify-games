@@ -8,7 +8,6 @@ pub struct Store {
     song_queue: Arc<RwLock<Vec<String>>>,
 }
 
-
 /// # Global store for the application
 ///
 /// Wrap every stateful object in an Arc<RwLock<T>> to allow for concurrent access
@@ -45,7 +44,6 @@ impl Default for Store {
     }
 }
 
-
 #[derive(Debug)]
 struct Token {
     token: String,
@@ -61,7 +59,6 @@ impl Token {
         self.expires < 60
     }
 }
-
 
 impl Default for Token {
     fn default() -> Self {
