@@ -2,6 +2,9 @@ use std::env;
 
 use serde::Serialize;
 
+pub mod event_loop;
+pub mod response_types;
+
 #[derive(Serialize, Debug)]
 pub struct SpotifyLogin {
     pub client_id: String,

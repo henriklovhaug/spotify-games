@@ -2,10 +2,13 @@ use std::sync::Arc;
 
 use tokio::sync::RwLock;
 
+use crate::SpotifyTask;
+
 #[derive(Debug, Clone)]
 pub struct Store {
     session_token: Arc<RwLock<Token>>,
     song_queue: Arc<RwLock<Vec<String>>>,
+    tasks: Arc<RwLock<Vec<SpotifyTask>>>,
 }
 
 /// # Global store for the application
@@ -16,6 +19,7 @@ impl Store {
         Store {
             session_token: Arc::new(RwLock::new(Token::default())),
             song_queue: Arc::new(RwLock::new(Vec::new())),
+            tasks: Arc::new(RwLock::new(Vec::new())),
         }
     }
 
