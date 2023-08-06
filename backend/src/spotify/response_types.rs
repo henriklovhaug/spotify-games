@@ -8,4 +8,7 @@ pub struct LoginResponse {
     _type: String,
     #[serde(rename = "expires_in")]
     pub expires: u32,
+    #[serde(rename = "scope")]
+    _scope: String,
+    pub refresh_token: String,
 }

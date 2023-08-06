@@ -35,7 +35,7 @@ async fn get_song_spotify(store: Store) -> Result<String, Box<dyn Error>> {
 
     let token = store.get_session_token().await;
 
-    println!("Token: {}", token);
+    println!("Token: {}", token.unwrap_or("kek".to_string()));
 
     let response = client
         .get(CURRENTLY_PLAYING_URL)
