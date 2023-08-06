@@ -1,11 +1,11 @@
 use serde::Deserialize;
 
 #[derive(Debug, Deserialize)]
-struct LoginResponse {
+pub struct LoginResponse {
     #[serde(rename = "access_token")]
-    token: String,
+    pub token: String,
     #[serde(rename = "token_type")]
     _type: String,
     #[serde(rename = "expires_in")]
-    expires: u32,
+    pub expires: u32,
 }
