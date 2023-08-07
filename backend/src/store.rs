@@ -1,7 +1,7 @@
 use std::sync::Arc;
 
 use chrono::{DateTime, Utc};
-use tokio::sync::RwLock;
+use tokio::sync::{OwnedRwLockReadGuard, RwLock, RwLockReadGuard};
 
 use crate::{spotify::response_types::LoginResponse, SpotifyTask};
 
@@ -48,6 +48,14 @@ impl Store {
         }
     }
 
+    pub async fn get_token_owned(self) -> OwnedRwLockReadGuard<Option<Token>> {
+        self.session_token.read_owned().await
+    }
+
+    pub async fn get_token(&self) -> RwLockReadGuard<Option<Token>> {
+        self.session_token.read().await
+    }
+
     pub async fn add_task(&self, task: SpotifyTask) {
         let mut tasks = self.tasks.write().await;
         tasks.push(task);
@@ -77,7 +85,7 @@ impl Default for Store {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct Token {
     pub token: String,
     pub expires: u32,
@@ -110,6 +118,10 @@ impl Token {
         let now = Utc::now();
         let duration = now - self.creation_time;
 
-        duration.num_seconds() > self.expires as i64
+        duration.num_seconds() + 60 > self.expires as i64
+    }
+
+    pub fn refresh_token(&self) -> String {
+        self.refresh_token.to_owned()
     }
 }
