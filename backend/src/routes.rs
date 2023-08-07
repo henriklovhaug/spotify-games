@@ -11,7 +11,7 @@ mod games;
 pub fn generate_routes(store: Store) -> Router {
     Router::new()
         .route("/currently_playing", get(get_currently_playing))
-        .layer(middleware::from_fn_with_state(store, check_auth_token))
+        .layer(middleware::from_fn_with_state(store.clone(), check_auth_token))
         .route("/callback", get(callback))
         .with_state(store)
 }

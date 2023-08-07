@@ -23,13 +23,13 @@ pub async fn check_auth_token<T>(
     if token.is_some() {
         Ok(next.run(request).await)
     } else {
-        let client_id = env::var("CLIENT_ID").expect("CLIENT_ID not set");
+        let client_id = env::var("SPOTIFY_CLIENT_ID").expect("SPOTIFY_CLIENT_ID not set");
 
         let scopes = encode(SCOPE);
-
+        let redirect_uri = encode(REDIRECT_URI);
         let url = format!(
             "{}client_id={}&response_type=code&redirect_uri={}&scope={}",
-            BASE_URL, client_id, REDIRECT_URI, scopes
+            BASE_URL, client_id, redirect_uri, scopes
         );
 
         Err(Redirect::to(&url))

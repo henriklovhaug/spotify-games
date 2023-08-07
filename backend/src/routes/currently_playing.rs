@@ -1,10 +1,10 @@
 use std::error::Error;
 
-use axum::{extract::State, headers::Authorization, Json};
+use axum::{extract::State, Json};
 use reqwest::Client;
 use serde::{Deserialize, Serialize};
 
-use crate::{spotify::token::login, store::Store, CLIENT};
+use crate::{store::Store, CLIENT};
 
 #[derive(Debug, Deserialize, Serialize)]
 pub struct Song {
@@ -15,23 +15,18 @@ pub struct Song {
     is_playing: bool,
 }
 
-pub async fn get_currently_playing(State(store): State<Store>) -> Result<String, String> {
+pub async fn get_currently_playing(State(store): State<Store>) -> Result<Json<Song>, String> {
     let song = get_song_spotify(store).await.map_err(|e| e.to_string())?;
 
-    // Ok(Json(song))
-    Ok(song)
+    Ok(Json(song))
 }
 
-// const CURRENTLY_PLAYING_URL: &str = "https://api.spotify.com/v1/me/player/currently-playing";
-const CURRENTLY_PLAYING_URL: &str = "https://api.spotify.com/v1/me/player";
-// const CURRENTLY_PLAYING_URL: &str = "https://api.spotify.com/v1/tracks/2TpxZ7JUBn3uw46aR7qd6V";
+const CURRENTLY_PLAYING_URL: &str = "https://api.spotify.com/v1/me/player/currently-playing";
 
-async fn get_song_spotify(store: Store) -> Result<String, Box<dyn Error>> {
+async fn get_song_spotify(store: Store) -> Result<Song, Box<dyn Error>> {
     let client = CLIENT.get_or_init(Client::new);
 
     let token = store.get_session_token().await;
-
-    // println!("Token: {}", token.unwrap_or("kek".to_string()));
 
     let response = client
         .get(CURRENTLY_PLAYING_URL)
@@ -39,7 +34,5 @@ async fn get_song_spotify(store: Store) -> Result<String, Box<dyn Error>> {
         .send()
         .await?;
 
-    // Ok(response.json::<Song>().await?)
-    //
-    Ok(response.text().await?)
+    Ok(response.json::<Song>().await?)
 }

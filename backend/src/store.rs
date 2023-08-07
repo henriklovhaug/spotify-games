@@ -48,6 +48,11 @@ impl Store {
         }
     }
 
+    pub async fn add_task(&self, task: SpotifyTask) {
+        let mut tasks = self.tasks.write().await;
+        tasks.push(task);
+    }
+
     pub async fn get_song_queue(&self) -> Vec<String> {
         self.song_queue.read().await.to_vec()
     }
