@@ -3,7 +3,7 @@ use std::sync::Arc;
 use chrono::{DateTime, Utc};
 use tokio::sync::RwLock;
 
-use crate::SpotifyTask;
+use crate::{spotify::response_types::LoginResponse, SpotifyTask};
 
 #[derive(Debug, Clone)]
 pub struct Store {
@@ -78,6 +78,17 @@ pub struct Token {
     pub expires: u32,
     creation_time: DateTime<Utc>,
     refresh_token: String,
+}
+
+impl From<LoginResponse> for Token {
+    fn from(value: LoginResponse) -> Self {
+        Token {
+            token: value.token,
+            expires: value.expires,
+            creation_time: Utc::now(),
+            refresh_token: value.refresh_token,
+        }
+    }
 }
 
 impl Token {

@@ -2,8 +2,11 @@ use std::error::Error;
 
 use reqwest::Client;
 
-use crate::{store::Store, CLIENT};
-
+use crate::{
+    spotify::response_types::LoginResponse,
+    store::{Store, Token},
+    CLIENT,
+};
 
 const TOKEN_URL: &str = "https://accounts.spotify.com/api/token";
 const REDIRECT_URI: &str = "http://localhost:3000/callback";
@@ -29,10 +32,9 @@ pub async fn login(store: Store, code: String) -> Result<(), Box<dyn Error>> {
         return Err("Log in failed".into());
     }
 
-    // store
-    //     .set_token(Into::into(response.json::<LoginResponse>().await?))
-    //     .await;
+    let token: Token = response.json::<LoginResponse>().await?.into();
 
-    todo!();
+    store.set_token(token).await;
+
     Ok(())
 }

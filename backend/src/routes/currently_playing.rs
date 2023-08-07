@@ -29,20 +29,13 @@ const CURRENTLY_PLAYING_URL: &str = "https://api.spotify.com/v1/me/player";
 async fn get_song_spotify(store: Store) -> Result<String, Box<dyn Error>> {
     let client = CLIENT.get_or_init(Client::new);
 
-    if !store.valid_token().await {
-        login(store.clone()).await?;
-    }
-
     let token = store.get_session_token().await;
 
-    println!("Token: {}", token.unwrap_or("kek".to_string()));
+    // println!("Token: {}", token.unwrap_or("kek".to_string()));
 
     let response = client
         .get(CURRENTLY_PLAYING_URL)
-        .header(
-            "Authorization",
-            format!("Bearer {}", token),
-        )
+        .header("Authorization", format!("Bearer {}", token.unwrap()))
         .send()
         .await?;
 
