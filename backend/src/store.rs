@@ -3,12 +3,15 @@ use std::sync::Arc;
 use chrono::{DateTime, Utc};
 use tokio::sync::{OwnedRwLockReadGuard, RwLock, RwLockReadGuard};
 
-use crate::{spotify::response_types::LoginResponse, SpotifyTask};
+use crate::{
+    spotify::{response_types::LoginResponse, types::Song},
+    SpotifyTask,
+};
 
 #[derive(Debug, Clone)]
 pub struct Store {
     session_token: Arc<RwLock<Option<Token>>>,
-    song_queue: Arc<RwLock<Vec<String>>>,
+    song_queue: Arc<RwLock<Vec<Song>>>,
     tasks: Arc<RwLock<Vec<SpotifyTask>>>,
 }
 
@@ -61,11 +64,11 @@ impl Store {
         tasks.push(task);
     }
 
-    pub async fn get_song_queue(&self) -> Vec<String> {
+    pub async fn get_song_queue(&self) -> Vec<Song> {
         self.song_queue.read().await.to_vec()
     }
 
-    pub async fn add_song_to_queue(&self, song: String) {
+    pub async fn add_song_to_queue(&self, song: Song) {
         let mut queue = self.song_queue.write().await;
         queue.push(song);
     }

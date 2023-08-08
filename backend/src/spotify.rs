@@ -5,6 +5,7 @@ use serde::Serialize;
 pub mod event_loop;
 pub mod response_types;
 pub mod token;
+pub mod types;
 
 #[derive(Serialize, Debug)]
 pub struct SpotifyLogin {

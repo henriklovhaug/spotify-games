@@ -2,19 +2,9 @@ use std::error::Error;
 
 use axum::{extract::State, Json};
 use reqwest::{Client, Response};
-use serde::{Deserialize, Serialize};
 use serde_json::Value;
 
-use crate::{store::Store, CLIENT};
-
-#[derive(Debug, Deserialize, Serialize)]
-pub struct Song {
-    name: String,
-    artist: String,
-    album: String,
-    duration: u32,
-    is_playing: bool,
-}
+use crate::{spotify::types::Song, store::Store, CLIENT};
 
 pub async fn get_currently_playing(State(store): State<Store>) -> Result<Json<Song>, String> {
     let song = get_song_spotify(store).await.map_err(|e| e.to_string())?;
@@ -41,11 +31,12 @@ async fn get_song_spotify(store: Store) -> Result<Song, Box<dyn Error>> {
 async fn parse_response(response: Response) -> Result<Song, Box<dyn Error>> {
     let v: Value = serde_json::from_str(&response.text().await?)?;
 
-    Ok(Song {
-        name: v["item"]["name"].to_string(),
-        artist: v["item"]["artists"][0]["name"].to_string(),
-        album: v["item"]["album"]["name"].to_string(),
-        duration: v["progress_ms"].as_u64().unwrap() as u32,
-        is_playing: v["is_playing"].as_bool().unwrap(),
-    })
+    Ok(Song::new(
+        v["item"]["id"].to_string(),
+        v["item"]["name"].to_string(),
+        v["item"]["artists"][0]["name"].to_string(),
+        v["item"]["album"]["name"].to_string(),
+        v["progress_ms"].as_u64().unwrap() as u32,
+        v["is_playing"].as_bool().unwrap(),
+    ))
 }
