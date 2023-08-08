@@ -7,14 +7,14 @@ use serde_json::Value;
 use crate::{spotify::types::Song, store::Store, CLIENT};
 
 pub async fn get_currently_playing(State(store): State<Store>) -> Result<Json<Song>, String> {
-    let song = get_song_spotify(store).await.map_err(|e| e.to_string())?;
+    let song = get_song_handler(store).await.map_err(|e| e.to_string())?;
 
     Ok(Json(song))
 }
 
 const CURRENTLY_PLAYING_URL: &str = "https://api.spotify.com/v1/me/player/currently-playing";
 
-async fn get_song_spotify(store: Store) -> Result<Song, Box<dyn Error>> {
+async fn get_song_handler(store: Store) -> Result<Song, Box<dyn Error>> {
     let client = CLIENT.get_or_init(Client::new);
 
     let token = store.get_session_token().await;

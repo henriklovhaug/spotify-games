@@ -10,7 +10,7 @@ pub struct Params {
     code: String,
 }
 
-pub async fn callback(
+pub async fn callback_handler(
     State(store): State<Store>,
     Query(param): Query<Params>,
 ) -> Result<Redirect, String> {

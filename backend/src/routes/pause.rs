@@ -8,7 +8,7 @@ use crate::CLIENT;
 
 const URL: &str = "https://api.spotify.com/v1/me/player/pause";
 
-pub async fn pause_music(State(store): State<Store>) -> StatusCode {
+pub async fn pause_music_handler(State(store): State<Store>) -> StatusCode {
     let client = CLIENT.get_or_init(Client::new);
 
     let token = store.get_session_token().await;
