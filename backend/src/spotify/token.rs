@@ -102,5 +102,5 @@ pub async fn restore_token_from_file(store: Store) -> Result<(), Box<dyn Error>>
 
     file.read_to_string(&mut contents).await?;
 
-    Ok(refresh_token(store, &contents).await?)
+    refresh_token(store, &contents).await
 }

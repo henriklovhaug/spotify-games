@@ -41,11 +41,7 @@ impl Store {
     }
 
     pub async fn get_session_token(&self) -> Option<String> {
-        if let Some(v) = self.session_token.read().await.as_ref() {
-            Some(v.token.clone())
-        } else {
-            None
-        }
+        self.session_token.read().await.as_ref().map(|v| v.token.clone())
     }
 
     pub async fn get_token_owned(self) -> OwnedRwLockReadGuard<Option<Token>> {
