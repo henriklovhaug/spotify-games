@@ -2,7 +2,7 @@
 
 ## Building
 
-create .env file in top level or in backend folder containing
+create .env file in the backend folder containing
 
 ```bash
 SPOTIFY_CLIENT_ID=<your spotify client id>
