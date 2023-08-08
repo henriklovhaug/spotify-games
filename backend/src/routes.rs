@@ -4,7 +4,10 @@ use axum::{
     Router,
 };
 
-use crate::{middleware::token_check::check_auth_token, store::Store};
+use crate::{
+    middleware::{token_check::check_auth_token, token_updater::check_token_lifetime},
+    store::Store,
+};
 
 use self::{
     callback::callback_handler,
@@ -33,6 +36,10 @@ pub fn generate_routes(store: Store) -> Router {
         .route("/queue", post(add_to_queue_handler))
         .route("/queue", get(get_queue_handler))
         .route("/search", get(search_song_handler))
+        .layer(middleware::from_fn_with_state(
+            store.clone(),
+            check_token_lifetime,
+        ))
         .layer(middleware::from_fn_with_state(
             store.clone(),
             check_auth_token,

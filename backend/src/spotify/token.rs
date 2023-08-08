@@ -87,6 +87,7 @@ pub async fn refresh_token(store: Store, refresh_token: &str) -> Result<(), Box<
     }
 
     store.set_token(parsed_response.into()).await;
+    save_refresh_token(store).await?;
 
     Ok(())
 }
