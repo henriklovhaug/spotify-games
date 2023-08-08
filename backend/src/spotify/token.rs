@@ -2,7 +2,10 @@ use std::{env, error::Error};
 
 use base64::{engine::general_purpose, Engine};
 use reqwest::Client;
-use tokio::{fs::File, io::AsyncReadExt};
+use tokio::{
+    fs::File,
+    io::{AsyncReadExt, AsyncWriteExt},
+};
 
 use crate::{
     spotify::response_types::LoginResponse,
@@ -109,4 +112,37 @@ pub async fn restore_token_from_file(store: Store) -> Result<(), Box<dyn Error>>
     println!("Refresh token: {}", contents);
 
     refresh_token(store, &contents).await
+}
+
+pub async fn save_refresh_token(store: Store) -> Result<(), Box<dyn Error>> {
+    let refresh_token = if let Some(v) = store.get_token().await.as_ref() {
+        v.refresh_token()
+    } else {
+        return Err("No session token found".into());
+    };
+
+    create_dir();
+
+    let path = dirs::data_dir()
+        .expect("No data directory found")
+        .join("spotify-game");
+
+    let mut file = File::create(format!(
+        "{}/data.txt",
+        path.to_str().expect("Path does not exists")
+    ))
+    .await?;
+
+    // TODO: Encrypt refresh token
+    file.write_all(refresh_token.as_bytes()).await?;
+
+    Ok(())
+}
+
+fn create_dir() {
+    let data_dir = dirs::data_dir().expect("No home directory found");
+    let path = data_dir.join("spotify-game");
+    if !path.exists() {
+        std::fs::create_dir_all(path).expect("Failed to create config directory");
+    }
 }

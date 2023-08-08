@@ -1,8 +1,9 @@
 use std::error::Error;
 
 use axum::{extract::State, Json};
-use reqwest::Client;
+use reqwest::{Client, Response};
 use serde::{Deserialize, Serialize};
+use serde_json::Value;
 
 use crate::{store::Store, CLIENT};
 
@@ -34,5 +35,17 @@ async fn get_song_spotify(store: Store) -> Result<Song, Box<dyn Error>> {
         .send()
         .await?;
 
-    Ok(response.json::<Song>().await?)
+    parse_response(response).await
+}
+
+async fn parse_response(response: Response) -> Result<Song, Box<dyn Error>> {
+    let v: Value = serde_json::from_str(&response.text().await?)?;
+
+    Ok(Song {
+        name: v["item"]["name"].to_string(),
+        artist: v["item"]["artists"][0]["name"].to_string(),
+        album: v["item"]["album"]["name"].to_string(),
+        duration: v["progress_ms"].as_u64().unwrap() as u32,
+        is_playing: v["is_playing"].as_bool().unwrap(),
+    })
 }
