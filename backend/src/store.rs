@@ -41,7 +41,11 @@ impl Store {
     }
 
     pub async fn get_session_token(&self) -> Option<String> {
-        self.session_token.read().await.as_ref().map(|v| v.token.clone())
+        self.session_token
+            .read()
+            .await
+            .as_ref()
+            .map(|v| v.token.clone())
     }
 
     pub async fn get_token_owned(self) -> OwnedRwLockReadGuard<Option<Token>> {
@@ -95,7 +99,7 @@ impl From<LoginResponse> for Token {
             token: value.token,
             expires: value.expires,
             creation_time: Utc::now(),
-            refresh_token: value.refresh_token,
+            refresh_token: value.refresh_token.expect("Refresh token not found"),
         }
     }
 }
@@ -110,11 +114,13 @@ impl Token {
         }
     }
 
+    const MINUTE: i64 = 60;
+
     pub fn is_expired(&self) -> bool {
         let now = Utc::now();
         let duration = now - self.creation_time;
 
-        duration.num_seconds() + 60 > self.expires as i64
+        duration.num_seconds() + Self::MINUTE > self.expires as i64
     }
 
     pub fn refresh_token(&self) -> String {

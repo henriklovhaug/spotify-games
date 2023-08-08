@@ -38,7 +38,7 @@ async fn save_refresh_token(store: Store) -> Result<(), Box<dyn Error>> {
     create_dir();
 
     let path = dirs::data_dir()
-        .expect("No home directory found")
+        .expect("No data directory found")
         .join("spotify-game");
 
     let mut file = File::create(format!(

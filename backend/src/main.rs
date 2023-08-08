@@ -1,7 +1,7 @@
 use dotenvy::dotenv;
 use std::net::SocketAddr;
 
-use backend::{routes::generate_routes, store::Store};
+use backend::{routes::generate_routes, spotify::token::restore_token_from_file, store::Store};
 
 #[tokio::main]
 async fn main() {
@@ -10,6 +10,13 @@ async fn main() {
     dotenv().ok();
 
     let store = Store::default();
+
+    if let Err(e) = restore_token_from_file(store.clone()).await {
+        println!(
+            "Failed to restore token from file: {}\n continues server",
+            e
+        );
+    }
 
     let routes = generate_routes(store);
 

@@ -77,9 +77,13 @@ pub async fn refresh_token(store: Store, refresh_token: &str) -> Result<(), Box<
         return Err("Refresh token failed".into());
     }
 
-    let token: Token = response.json::<LoginResponse>().await?.into();
+    let mut parsed_response: LoginResponse = response.json::<LoginResponse>().await?;
 
-    store.set_token(token).await;
+    if !parsed_response.refresh_exists() {
+        parsed_response.set_refresh_token(refresh_token.to_string());
+    }
+
+    store.set_token(parsed_response.into()).await;
 
     Ok(())
 }
@@ -93,7 +97,7 @@ fn base64_encode(id: &str, secret: &str) -> String {
 pub async fn restore_token_from_file(store: Store) -> Result<(), Box<dyn Error>> {
     let path = dirs::data_dir()
         .ok_or::<String>("File not found".into())?
-        .join("spotify-games")
+        .join("spotify-game")
         .join("data.txt");
 
     let mut file = File::open(path).await?;
@@ -101,6 +105,8 @@ pub async fn restore_token_from_file(store: Store) -> Result<(), Box<dyn Error>>
     let mut contents = String::new();
 
     file.read_to_string(&mut contents).await?;
+
+    println!("Refresh token: {}", contents);
 
     refresh_token(store, &contents).await
 }
