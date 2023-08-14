@@ -1,5 +1,9 @@
+<script lang="ts">
+	import Search from '$lib/components/search.svelte';
+</script>
+
 <div class="container">
-	<div class="search" />
+	<Search />
 </div>
 
 <style lang="scss">
@@ -11,14 +15,7 @@
 		display: flex;
 		justify-content: flex-end;
 		margin: 0;
-		background-color: green;
+		background-color: #007500;
 		height: 7vh;
-	}
-
-	.search {
-		height: 100%;
-		width: 7vh;
-		background-color: white;
-		justify-self: flex-end;
 	}
 </style>
