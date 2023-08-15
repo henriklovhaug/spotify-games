@@ -6,7 +6,7 @@
 </script>
 
 <h1>Welcome to Spotify Game</h1>
-<div class="games">
+<div>
 	<ul>
 		<li>
 			<p>TODO</p>
@@ -19,6 +19,3 @@
 		<SongBox name={song.name} artist={song.artist} duration={song.duration} />
 	{/each}
 {/if}
-
-<style lang="scss">
-</style>

@@ -11,7 +11,7 @@ use urlencoding::encode;
 use crate::store::Store;
 
 const BASE_URL: &str = "https://accounts.spotify.com/authorize?";
-const REDIRECT_URI: &str = "http://localhost:3000/callback";
+const REDIRECT_URI: &str = "http://localhost:4000/callback";
 const SCOPE: &str =
     "user-read-private user-read-email user-read-playback-state user-modify-playback-state";
 

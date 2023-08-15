@@ -14,7 +14,7 @@ use crate::{
 };
 
 const TOKEN_URL: &str = "https://accounts.spotify.com/api/token";
-const REDIRECT_URI: &str = "http://localhost:3000/callback";
+const REDIRECT_URI: &str = "http://localhost:4000/callback";
 
 pub async fn login(store: Store, code: String) -> Result<(), Box<dyn Error>> {
     let client = CLIENT.get_or_init(Client::new);

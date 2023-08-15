@@ -2,20 +2,6 @@
 	import Search from '$lib/components/search.svelte';
 </script>
 
-<div class="container">
+<div class="relative left-0 top-0 flex h-11 w-screen justify-end bg-green-700">
 	<Search />
 </div>
-
-<style lang="scss">
-	.container {
-		position: relative;
-		top: 0;
-		left: 0;
-		width: 100vw;
-		display: flex;
-		justify-content: flex-end;
-		margin: 0;
-		background-color: #007500;
-		height: 7vh;
-	}
-</style>
