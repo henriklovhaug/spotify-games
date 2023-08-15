@@ -23,7 +23,7 @@
 {:else}
 	<form method="post" action="?/search" use:enhance>
 		<label for="search-box">
-			<input type="text" id="search-box" on:focusout={handle_submit} value={search} />
+			<input name="search" type="text" id="search-box" on:focusout={handle_submit} value={search} />
 		</label>
 	</form>
 {/if}
