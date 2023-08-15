@@ -15,9 +15,9 @@
 </script>
 
 {#if !visible}
-	<div class="search-icon">
+	<div class="h-full">
 		<button class="h-fit border-none bg-none" on:click={() => (visible = !visible)}>
-			<img src="icons/search-icon.png" alt="search icon" class=" pr-2 pt-2" />
+			<img src="icons/search-icon.png" alt="search icon" class=" h-full pr-2 pt-2 object-contain" />
 		</button>
 	</div>
 {:else}
