@@ -2,16 +2,20 @@
 	export let name: string;
 	export let artist: string;
 	export let duration: number;
+	export let id: string;
 
 	$: time = new Date(duration).toISOString().slice(14, 19);
 </script>
 
-<button class="bg-green-700 rounded-md my-2 w-fit">
-	<div class=" flex w-4/6 flex-row items-center justify-center">
-		<div class="text-lg">{name}</div>
-		<div class="flex flex-col">
-			<div>{artist}</div>
-			<div>{time}</div>
-		</div>
-	</div>
-</button>
+<div class="my-2 w-4/6">
+	<form action="?/queue" method="post">
+		<input type="hidden" name="id" value={id} />
+		<button class="flex w-full flex-col rounded-lg bg-green-700" type="submit">
+			<span class="w-full text-lg">{name}</span>
+			<span class="flex w-full flex-row">
+				<span class="w-3/5">{artist}</span>
+				<span>{time}</span>
+			</span>
+		</button>
+	</form>
+</div>

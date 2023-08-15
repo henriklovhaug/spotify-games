@@ -8,14 +8,14 @@ use reqwest::{Client, Response};
 use serde::Deserialize;
 use serde_json::Value;
 
-use crate::{middleware::token_check, spotify::types::Song, store::Store, CLIENT};
+use crate::{spotify::types::Song, store::Store, CLIENT};
 
 #[derive(Debug, Deserialize)]
 pub struct Params {
     search: String,
 }
 
-const URL: &str = "https://api.spotify.com/v1/search?type=track&limit=10&q=";
+const URL: &str = "https://api.spotify.com/v1/search?type=track&limit=6&q=";
 
 pub async fn search_song_handler(
     State(store): State<Store>,
