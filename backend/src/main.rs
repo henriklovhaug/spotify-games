@@ -20,7 +20,7 @@ async fn main() {
 
     let routes = generate_routes(store);
 
-    let addr = "[::]:3000".parse::<SocketAddr>().unwrap();
+    let addr = "[::]:4000".parse::<SocketAddr>().unwrap();
 
     axum::Server::bind(&addr)
         .serve(routes.into_make_service_with_connect_info::<SocketAddr>())

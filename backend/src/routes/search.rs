@@ -1,4 +1,4 @@
-use std::{error::Error, fmt::format};
+use std::error::Error;
 
 use axum::{
     extract::{Query, State},
@@ -43,5 +43,17 @@ async fn search(search_str: &str, auth: &str) -> Result<Vec<Song>, Box<dyn Error
 
 async fn parse_response(response: Response) -> Result<Vec<Song>, Box<dyn Error>> {
     let parsed: Value = serde_json::from_str(&response.text().await?)?;
-    todo!("implement parse_response")
+    let items = parsed["tracks"]["items"].as_array().ok_or("parse error")?;
+    let mut songs = Vec::new();
+    for song in items.iter() {
+        let id = song["id"].to_string();
+        let name = song["name"].to_string();
+        let artist = song["artists"][0]["name"].to_string();
+        let album = song["album"]["name"].to_string();
+        let duration = song["duration_ms"].as_u64().unwrap() as u32;
+        let is_playing = false;
+        let song = Song::new(id, name, artist, album, duration, is_playing);
+        songs.push(song);
+    }
+    Ok(songs)
 }
