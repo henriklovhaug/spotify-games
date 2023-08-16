@@ -9,8 +9,6 @@ use backend::{
 
 #[tokio::main]
 async fn main() {
-    println!("Hello, world!");
-
     dotenv().ok();
 
     let store = Store::default();
