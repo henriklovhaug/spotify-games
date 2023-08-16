@@ -11,7 +11,7 @@ use crate::{
 
 use self::{
     callback::callback_handler,
-    currently_playing::get_currently_playing,
+    currently_playing::get_currently_playing_handler,
     index::index_handler,
     pause::pause_music_handler,
     queue::{add_to_queue_handler, get_queue_handler},
@@ -30,7 +30,7 @@ mod skip;
 
 pub fn generate_routes(store: Store) -> Router {
     Router::new()
-        .route("/currently_playing", get(get_currently_playing))
+        .route("/currently_playing", get(get_currently_playing_handler))
         .route("/pause", put(pause_music_handler))
         .route("/skip", put(skip_n_tracks_handler))
         .route("/queue", post(add_to_queue_handler))

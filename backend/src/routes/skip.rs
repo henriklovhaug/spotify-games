@@ -21,7 +21,7 @@ impl SkipBody {
     }
 }
 
-pub async fn skip_n_tracks_handler(State(store): State<Store>, body: String) -> () {
+pub async fn skip_n_tracks_handler(State(store): State<Store>, body: String) {
     let n: u8 = body.parse().unwrap(); // Handle error
 
     if let Err(e) = skip(n, store).await {

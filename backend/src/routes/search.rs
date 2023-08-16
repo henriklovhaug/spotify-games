@@ -29,7 +29,7 @@ pub async fn search_song_handler(
 
     let songs = search(&search_str, &token)
         .await
-        .map_err(|err| format!("Could not finish request: {}", err.to_string()))?;
+        .map_err(|err| format!("Could not finish request: {}", err))?;
     Ok(Json(songs))
 }
 
@@ -52,8 +52,7 @@ async fn parse_response(response: Response) -> Result<Vec<Song>, Box<dyn Error>>
         let artist = song["artists"][0]["name"].as_str().unwrap().to_string();
         let album = song["album"]["name"].as_str().unwrap().to_string();
         let duration = song["duration_ms"].as_u64().unwrap() as u32;
-        let is_playing = false;
-        let song = Song::new(id, name, artist, album, duration, is_playing);
+        let song = Song::new(id, name, artist, album, duration);
         songs.push(song);
     }
     Ok(songs)

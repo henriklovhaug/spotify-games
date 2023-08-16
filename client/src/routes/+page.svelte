@@ -17,7 +17,12 @@
 	{#if form?.body}
 		{#each form.body as song}
 			<!-- Every songbox will add to queue when clicked on -->
-			<SongBox id={song.id} name={song.name} artist={song.artist} duration={song.duration} />
+			<SongBox
+				id={song.id}
+				name={song.name}
+				artist={song.artist}
+				duration={song.duration}
+			/>
 		{/each}
 	{/if}
 </div>

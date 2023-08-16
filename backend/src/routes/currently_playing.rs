@@ -6,7 +6,7 @@ use serde_json::Value;
 
 use crate::{spotify::types::Song, store::Store, CLIENT};
 
-pub async fn get_currently_playing(State(store): State<Store>) -> Result<Json<Song>, String> {
+pub async fn get_currently_playing_handler(State(store): State<Store>) -> Result<Json<Song>, String> {
     let song = get_song_handler(store).await.map_err(|e| e.to_string())?;
 
     Ok(Json(song))
@@ -37,6 +37,5 @@ async fn parse_response(response: Response) -> Result<Song, Box<dyn Error>> {
         v["item"]["artists"][0]["name"].to_string(),
         v["item"]["album"]["name"].to_string(),
         v["progress_ms"].as_u64().unwrap() as u32,
-        v["is_playing"].as_bool().unwrap(),
     ))
 }

@@ -4,5 +4,4 @@ export interface Song {
 	artist: string;
 	album: string;
 	duration: number;
-	is_playing: boolean;
 }

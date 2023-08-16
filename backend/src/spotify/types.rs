@@ -7,25 +7,56 @@ pub struct Song {
     artist: String,
     album: String,
     duration: u32,
-    is_playing: bool,
 }
 
 impl Song {
-    pub fn new(
-        id: String,
-        name: String,
-        artist: String,
-        album: String,
-        duration: u32,
-        is_playing: bool,
-    ) -> Song {
+    pub fn new(id: String, name: String, artist: String, album: String, duration: u32) -> Song {
         Song {
             id,
             name,
             artist,
             album,
             duration,
-            is_playing,
         }
     }
+
+    pub fn get_id(&self) -> &str {
+        &self.id
+    }
+}
+
+#[derive(Debug, Serialize)]
+pub struct CurrentSong {
+    id: String,
+    name: String,
+    artist: String,
+    album: String,
+    duration: u32,
+    progress: u32,
+}
+
+impl CurrentSong {
+    pub fn new(
+        id: String,
+        name: String,
+        artist: String,
+        album: String,
+        duration: u32,
+        progress: u32,
+    ) -> CurrentSong {
+        CurrentSong {
+            id,
+            name,
+            artist,
+            album,
+            duration,
+            progress,
+        }
+    }
+}
+
+#[derive(Debug, Clone, Copy)]
+pub enum SpotifyActivity {
+    Music,
+    Game,
 }

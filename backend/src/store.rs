@@ -4,7 +4,10 @@ use chrono::{DateTime, Utc};
 use tokio::sync::{OwnedRwLockReadGuard, RwLock, RwLockReadGuard};
 
 use crate::{
-    spotify::{response_types::LoginResponse, types::Song},
+    spotify::{
+        response_types::LoginResponse,
+        types::{Song, SpotifyActivity},
+    },
     SpotifyTask,
 };
 
@@ -13,6 +16,7 @@ pub struct Store {
     session_token: Arc<RwLock<Option<Token>>>,
     song_queue: Arc<RwLock<Vec<Song>>>,
     tasks: Arc<RwLock<Vec<SpotifyTask>>>,
+    activity: Arc<RwLock<SpotifyActivity>>,
 }
 
 /// # Global store for the application
@@ -24,6 +28,7 @@ impl Store {
             session_token: Arc::new(RwLock::new(None)),
             song_queue: Arc::new(RwLock::new(Vec::new())),
             tasks: Arc::new(RwLock::new(Vec::new())),
+            activity: Arc::new(RwLock::new(SpotifyActivity::Music)),
         }
     }
 
@@ -79,6 +84,10 @@ impl Store {
         } else {
             false
         }
+    }
+
+    pub async fn get_activity(&self) -> SpotifyActivity {
+        self.activity.read().await.to_owned()
     }
 }
 
