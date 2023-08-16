@@ -1,3 +1,4 @@
+use chrono::Duration;
 use serde::{Deserialize, Serialize};
 
 #[derive(Debug, Deserialize, Serialize, Clone)]
@@ -52,6 +53,9 @@ impl CurrentSong {
             duration,
             progress,
         }
+    }
+    pub fn get_remaining_time(&self) -> Duration {
+        Duration::seconds((self.duration - self.progress) as i64 / 1000)
     }
 }
 

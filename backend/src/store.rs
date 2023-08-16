@@ -1,4 +1,4 @@
-use std::sync::Arc;
+use std::{collections::VecDeque, sync::Arc};
 
 use chrono::{DateTime, Utc};
 use tokio::sync::{OwnedRwLockReadGuard, RwLock, RwLockReadGuard};
@@ -14,7 +14,7 @@ use crate::{
 #[derive(Debug, Clone)]
 pub struct Store {
     session_token: Arc<RwLock<Option<Token>>>,
-    song_queue: Arc<RwLock<Vec<Song>>>,
+    song_queue: Arc<RwLock<VecDeque<Song>>>,
     tasks: Arc<RwLock<Vec<SpotifyTask>>>,
     activity: Arc<RwLock<SpotifyActivity>>,
 }
@@ -26,7 +26,7 @@ impl Store {
     pub fn new() -> Store {
         Store {
             session_token: Arc::new(RwLock::new(None)),
-            song_queue: Arc::new(RwLock::new(Vec::new())),
+            song_queue: Arc::new(RwLock::new(VecDeque::new())),
             tasks: Arc::new(RwLock::new(Vec::new())),
             activity: Arc::new(RwLock::new(SpotifyActivity::Music)),
         }
@@ -69,13 +69,23 @@ impl Store {
         tasks.push(task);
     }
 
-    pub async fn get_song_queue(&self) -> Vec<Song> {
-        self.song_queue.read().await.to_vec()
+    pub async fn get_song_queue(&self) -> VecDeque<Song> {
+        self.song_queue.read().await.to_owned()
+    }
+
+    pub async fn get_next_song(&self) -> Option<Song> {
+        let mut queue = self.song_queue.write().await;
+        queue.pop_front()
+    }
+
+    pub async fn view_next_song(&self) -> Option<Song> {
+        let queue = self.song_queue.read().await;
+        queue.front().cloned()
     }
 
     pub async fn add_song_to_queue(&self, song: Song) {
         let mut queue = self.song_queue.write().await;
-        queue.push(song);
+        queue.push_back(song);
     }
 
     pub async fn valid_token(&self) -> bool {

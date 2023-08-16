@@ -1,6 +1,6 @@
 use std::error::Error;
 
-use reqwest::{Client, Response};
+use reqwest::{header::CONTENT_LENGTH, Client, Response};
 use serde_json::Value;
 
 use crate::{store::Store, CLIENT};
@@ -46,6 +46,14 @@ pub async fn add_song_to_spotify_queue(song: Song, store: Store) -> Result<(), B
         .await
         .ok_or("No session token set")?;
 
-    client.post(&url).bearer_auth(token).send().await?;
+    let response = client
+        .post(&url)
+        .header(CONTENT_LENGTH, 0)
+        .bearer_auth(token)
+        .send()
+        .await?;
+    if response.status() != 204 {
+        return Err("Error adding song to queue".into());
+    }
     Ok(())
 }

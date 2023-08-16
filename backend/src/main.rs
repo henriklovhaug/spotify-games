@@ -1,7 +1,11 @@
 use dotenvy::dotenv;
 use std::net::SocketAddr;
 
-use backend::{routes::generate_routes, spotify::token::restore_token_from_file, store::Store};
+use backend::{
+    routes::generate_routes,
+    spotify::{event_loop::spotify_loop, token::restore_token_from_file},
+    store::Store,
+};
 
 #[tokio::main]
 async fn main() {
@@ -17,6 +21,11 @@ async fn main() {
             e
         );
     }
+
+    let store_clone = store.clone();
+    tokio::spawn(async move {
+        spotify_loop(store_clone).await;
+    });
 
     let routes = generate_routes(store);
 

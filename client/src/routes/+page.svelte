@@ -22,6 +22,7 @@
 				name={song.name}
 				artist={song.artist}
 				duration={song.duration}
+        album={song.album}
 			/>
 		{/each}
 	{/if}
