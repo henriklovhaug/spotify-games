@@ -11,7 +11,6 @@ export const actions: Actions = {
     );
     if (response.ok) {
       const json: Song[] = await response.json();
-      console.log(json);
       return {
         body: json,
       };

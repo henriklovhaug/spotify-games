@@ -19,7 +19,10 @@ pub async fn spotify_loop(store: Store) {
         match gamestate {
             SpotifyActivity::Music => {
                 if store.view_next_song().await.is_some() {
-                    let song = get_current_song(store.clone()).await.unwrap();
+                    let song = match get_current_song(store.clone()).await {
+                        Ok(song) => song,
+                        Err(_) => return,
+                    };
                     let duration_left = song.get_remaining_time().num_seconds();
                     if duration_left < ADD_TO_QUEUE_THRESHOLD {
                         let next_song = store.get_next_song().await.unwrap();
