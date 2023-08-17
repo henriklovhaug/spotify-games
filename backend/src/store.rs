@@ -11,6 +11,9 @@ use crate::{
     SpotifyTask,
 };
 
+/// # Global store for the application
+///
+/// Wrap every stateful object in an Arc<RwLock<T>> to allow for concurrent access
 #[derive(Debug, Clone)]
 pub struct Store {
     session_token: Arc<RwLock<Option<Token>>>,
@@ -19,9 +22,6 @@ pub struct Store {
     activity: Arc<RwLock<SpotifyActivity>>,
 }
 
-/// # Global store for the application
-///
-/// Wrap every stateful object in an Arc<RwLock<T>> to allow for concurrent access
 impl Store {
     pub fn new() -> Store {
         Store {
@@ -86,6 +86,16 @@ impl Store {
     pub async fn add_song_to_queue(&self, song: Song) {
         let mut queue = self.song_queue.write().await;
         queue.push_back(song);
+    }
+
+    pub async fn start_game(&self) {
+        let mut activity = self.activity.write().await;
+        *activity = SpotifyActivity::Game;
+    }
+
+    pub async fn end_game(&self) {
+        let mut activity = self.activity.write().await;
+        *activity = SpotifyActivity::Music;
     }
 
     pub async fn valid_token(&self) -> bool {

@@ -4,6 +4,7 @@ use serde::Serialize;
 
 pub mod api;
 pub mod event_loop;
+pub mod game;
 pub mod response_types;
 pub mod token;
 pub mod types;

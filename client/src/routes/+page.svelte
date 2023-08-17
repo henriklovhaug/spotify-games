@@ -1,13 +1,19 @@
 <script lang="ts">
+	const games = ['6-minutes', 'Rattling bog'];
 </script>
 
 <div class="flex flex-col items-center">
-	<h1>Welcome to Spotify Game</h1>
+	<h1>Spotify Game</h1>
 	<div>
 		<ul>
-			<li>
-				<p>TODO</p>
-			</li>
+			{#each games as game}
+				<li>
+					<button
+						class="my-2 rounded border border-blue-500 bg-transparent px-4 py-2 font-semibold text-blue-700 hover:border-transparent hover:bg-blue-500 hover:text-white"
+						>{game}</button
+					>
+				</li>
+			{/each}
 		</ul>
 	</div>
 </div>

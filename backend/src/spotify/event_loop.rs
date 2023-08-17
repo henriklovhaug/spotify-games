@@ -32,7 +32,7 @@ pub async fn spotify_loop(store: Store) {
                     }
                 }
             }
-            SpotifyActivity::Game => todo!(),
+            SpotifyActivity::Game => return,
         }
     }
 }
