@@ -26,7 +26,7 @@
 {#if !visible}
 	<div class="h-full object-contain">
 		<button class="h-full border-none bg-none" on:click={() => (visible = !visible)}>
-			<img src="/icons/search-icon.png" alt="search icon" class=" h-5/6 pr-2 pt-2" />
+			<img src="/icons/search-icon.png" alt="search icon" class=" h-5/6 pr-2 py-2" />
 		</button>
 	</div>
 {:else}
