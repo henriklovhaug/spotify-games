@@ -1,8 +1,4 @@
 <script lang="ts">
-	import SongBox from '$lib/components/songBox.svelte';
-	import type { ActionData } from './$types';
-
-	export let form: ActionData;
 </script>
 
 <div class="flex flex-col items-center">
@@ -14,16 +10,4 @@
 			</li>
 		</ul>
 	</div>
-	{#if form?.body}
-		{#each form.body as song}
-			<!-- Every songbox will add to queue when clicked on -->
-			<SongBox
-				id={song.id}
-				name={song.name}
-				artist={song.artist}
-				duration={song.duration}
-        album={song.album}
-			/>
-		{/each}
-	{/if}
 </div>

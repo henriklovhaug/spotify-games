@@ -26,11 +26,11 @@
 {#if !visible}
 	<div class="h-full object-contain">
 		<button class="h-full border-none bg-none" on:click={() => (visible = !visible)}>
-			<img src="icons/search-icon.png" alt="search icon" class=" h-5/6 pr-2 pt-2" />
+			<img src="/icons/search-icon.png" alt="search icon" class=" h-5/6 pr-2 pt-2" />
 		</button>
 	</div>
 {:else}
-	<form class="m-0 flex w-screen justify-center pt-2" method="post" action="?/search" use:enhance>
+	<form class="m-0 flex w-screen justify-center pt-2" method="post" action="/?/search" use:enhance>
 		<label for="search-box">
 			<input
 				class="h-6 w-4/5 rounded-md bg-neutral-200"
