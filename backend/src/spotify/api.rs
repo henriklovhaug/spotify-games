@@ -52,8 +52,35 @@ pub async fn add_song_to_spotify_queue(song: Song, store: Store) -> Result<(), B
         .bearer_auth(token)
         .send()
         .await?;
-    if response.status() != 204 {
+    if response.status().is_success() {
         return Err("Error adding song to queue".into());
     }
+    Ok(())
+}
+
+const SKIP_URL: &str = "https://api.spotify.com/v1/me/player/next";
+
+pub async fn skip(store: Store) -> Result<(), Box<dyn Error>> {
+    let token = if let Some(v) = store.get_session_token().await {
+        v
+    } else {
+        return Err("No token found".into());
+    };
+
+    let client = CLIENT.get_or_init(Client::new);
+
+    let response = client
+        .put(SKIP_URL)
+        .header(CONTENT_LENGTH, 0)
+        .bearer_auth(token)
+        .send()
+        .await?;
+
+    if !response.status().is_success() {
+        let body = response.text().await?;
+        println!("Skip music failed {:?}", body);
+        return Err("Skip music failed".into());
+    }
+
     Ok(())
 }

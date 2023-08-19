@@ -12,6 +12,7 @@ use crate::{
 use self::{
     callback::callback_handler,
     currently_playing::get_currently_playing_handler,
+    games::{six_minutes::skip, start_game},
     index::index_handler,
     pause::pause_music_handler,
     queue::{add_to_queue_handler, get_queue_handler},
@@ -36,6 +37,7 @@ pub fn generate_routes(store: Store) -> Router {
         .route("/queue", post(add_to_queue_handler))
         .route("/queue", get(get_queue_handler))
         .route("/search", get(search_song_handler))
+        .route("/game/:game", put(start_game))
         .layer(middleware::from_fn_with_state(
             store.clone(),
             check_token_lifetime,
@@ -45,6 +47,11 @@ pub fn generate_routes(store: Store) -> Router {
             check_auth_token,
         ))
         .route("/callback", get(callback_handler))
-        .with_state(store)
+        .with_state(store.clone())
         .route("/", get(index_handler))
+        .nest("/sixminutes", six_minutes_routes(store))
+}
+
+fn six_minutes_routes(store: Store) -> Router {
+    Router::new().route("/skip", put(skip)).with_state(store)
 }

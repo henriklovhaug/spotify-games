@@ -2,6 +2,7 @@ use std::sync::OnceLock;
 
 use reqwest::Client;
 
+pub mod game_store;
 pub mod middleware;
 pub mod routes;
 pub mod spotify;

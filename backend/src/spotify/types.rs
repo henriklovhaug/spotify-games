@@ -62,5 +62,10 @@ impl CurrentSong {
 #[derive(Debug, Clone, Copy)]
 pub enum SpotifyActivity {
     Music,
-    Game,
+    Game(Games),
+}
+
+#[derive(Debug, Clone, Copy, Serialize, Deserialize)]
+pub enum Games {
+    SixMinutes,
 }

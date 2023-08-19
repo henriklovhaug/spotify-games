@@ -6,7 +6,7 @@ use tokio::sync::{OwnedRwLockReadGuard, RwLock, RwLockReadGuard};
 use crate::{
     spotify::{
         response_types::LoginResponse,
-        types::{Song, SpotifyActivity},
+        types::{Games, Song, SpotifyActivity},
     },
     SpotifyTask,
 };
@@ -88,9 +88,9 @@ impl Store {
         queue.push_back(song);
     }
 
-    pub async fn start_game(&self) {
+    pub async fn start_game(&self, game: Games) {
         let mut activity = self.activity.write().await;
-        *activity = SpotifyActivity::Game;
+        *activity = SpotifyActivity::Game(game);
     }
 
     pub async fn end_game(&self) {
