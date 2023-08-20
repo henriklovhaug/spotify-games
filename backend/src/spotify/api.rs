@@ -20,10 +20,10 @@ pub async fn get_current_song(store: Store) -> Result<CurrentSong, Box<dyn Error
         .send()
         .await?;
 
-    parse_response(response).await
+    parse_response_current_song(response).await
 }
 
-async fn parse_response(response: Response) -> Result<CurrentSong, Box<dyn Error>> {
+async fn parse_response_current_song(response: Response) -> Result<CurrentSong, Box<dyn Error>> {
     let v: Value = serde_json::from_str(&response.text().await?)?;
 
     Ok(CurrentSong::new(

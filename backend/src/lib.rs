@@ -21,3 +21,9 @@ pub enum Game {
     SixMinutes,
     RatlingBog,
 }
+
+#[derive(Clone)]
+pub struct ChannelMessage {
+    pub channel: String,
+    pub message: String,
+}
