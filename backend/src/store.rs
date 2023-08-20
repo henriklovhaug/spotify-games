@@ -2,7 +2,7 @@ use std::{collections::VecDeque, sync::Arc};
 
 use chrono::{DateTime, Utc};
 use tokio::sync::{
-    broadcast::{Receiver, Sender},
+    broadcast::{self, Receiver, Sender},
     OwnedRwLockReadGuard, RwLock, RwLockReadGuard,
 };
 
@@ -24,31 +24,23 @@ pub struct Store {
     tasks: Arc<RwLock<Vec<SpotifyTask>>>,
     activity: Arc<RwLock<SpotifyActivity>>,
     tx: Sender<ChannelMessage>,
-    rx: Arc<Receiver<ChannelMessage>>,
 }
 
-// impl Default for Store {
-//     fn default() -> Self {
-//         Self {
-//             session_token: Arc::new(RwLock::new(None)),
-//             song_queue: Default::default(),
-//             tasks: Default::default(),
-//             activity: Default::default(),
-//             tx: Default::default(),
-//             rx: Default::default(),
-//         }
-//     }
-// }
+impl Default for Store {
+    fn default() -> Self {
+        let (tx, _rx) = broadcast::channel(32);
+        Store::new(tx)
+    }
+}
 
 impl Store {
-    pub fn new(tx: Sender<ChannelMessage>, rx: Receiver<ChannelMessage>) -> Store {
+    pub fn new(tx: Sender<ChannelMessage>) -> Store {
         Store {
             session_token: Arc::new(RwLock::new(None)),
             song_queue: Arc::new(RwLock::new(VecDeque::new())),
             tasks: Arc::new(RwLock::new(Vec::new())),
             activity: Arc::new(RwLock::new(SpotifyActivity::Music)),
             tx,
-            rx: Arc::new(rx),
         }
     }
 
@@ -128,6 +120,14 @@ impl Store {
 
     pub async fn get_activity(&self) -> SpotifyActivity {
         self.activity.read().await.to_owned()
+    }
+
+    pub fn get_receiver(&self) -> Receiver<ChannelMessage> {
+        self.tx.subscribe()
+    }
+
+    pub fn get_sender(&self) -> Sender<ChannelMessage> {
+        self.tx.to_owned()
     }
 }
 

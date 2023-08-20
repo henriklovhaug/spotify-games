@@ -3,7 +3,7 @@ use std::{borrow::Cow, net::SocketAddr};
 use axum::{
     extract::{
         ws::{CloseFrame, Message, WebSocket},
-        ConnectInfo, WebSocketUpgrade,
+        ConnectInfo, WebSocketUpgrade, State,
     },
     headers::UserAgent,
     middleware,
@@ -11,12 +11,10 @@ use axum::{
     routing::{get, post, put},
     Router, TypedHeader,
 };
-use tokio::sync::broadcast::Receiver;
 
 use crate::{
     middleware::{token_check::check_auth_token, token_updater::check_token_lifetime},
     store::Store,
-    ChannelMessage,
 };
 use futures::{sink::SinkExt, stream::StreamExt};
 
@@ -69,6 +67,7 @@ fn six_minutes_routes(store: Store) -> Router {
 }
 
 async fn ws_handler(
+    State(store): State<Store>,
     ws: WebSocketUpgrade,
     user_agent: Option<TypedHeader<UserAgent>>,
     ConnectInfo(addr): ConnectInfo<SocketAddr>,
@@ -81,9 +80,9 @@ async fn ws_handler(
     println!("`{user_agent}` at {addr} connected.");
     // finalize the upgrade process by returning upgrade callback.
     // we can customize the callback by sending additional info such as address.
-    ws.on_upgrade(move |socket| handle_socket(socket, addr))
+    ws.on_upgrade(move |socket| handle_socket(socket, addr, store))
 }
-async fn handle_socket(mut socket: WebSocket, who: SocketAddr) {
+async fn handle_socket(mut socket: WebSocket, who: SocketAddr, store: Store) {
     //send a ping (unsupported by some browsers) just to kick things off and get a response
     if socket.send(Message::Ping(vec![1, 2, 3])).await.is_ok() {
         println!("Pinged {}...", who);
@@ -93,6 +92,8 @@ async fn handle_socket(mut socket: WebSocket, who: SocketAddr) {
         // If we can not send messages, there is no way to salvage the statemachine anyway.
         return;
     }
+
+    let rx = store.get_receiver();
 
     // Since each client gets individual statemachine, we can pause handling
     // when necessary to wait for some external event (in this case illustrated by sleeping).

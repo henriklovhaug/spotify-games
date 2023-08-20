@@ -1,20 +1,17 @@
 use dotenvy::dotenv;
-use tokio::sync::broadcast;
 use std::net::SocketAddr;
 
 use backend::{
     routes::generate_routes,
     spotify::{event_loop::spotify_loop, token::restore_token_from_file},
     store::Store,
-    ChannelMessage,
 };
 
 #[tokio::main]
 async fn main() {
     dotenv().ok();
 
-    let (tx, mut rx) = broadcast::channel::<ChannelMessage>(32);
-    let store = Store::new(tx, rx);
+    let store = Store::default();
 
     if let Err(e) = restore_token_from_file(store.clone()).await {
         println!(
