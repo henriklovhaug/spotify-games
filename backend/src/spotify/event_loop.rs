@@ -34,6 +34,7 @@ pub async fn spotify_loop(store: Store) {
             }
             SpotifyActivity::Game(game) => match game {
                 super::types::Games::SixMinutes => return,
+                super::types::Games::RattlingBog => return,
             },
         }
     }

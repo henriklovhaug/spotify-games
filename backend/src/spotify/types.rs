@@ -68,4 +68,5 @@ pub enum SpotifyActivity {
 #[derive(Debug, Clone, Copy, Serialize, Deserialize)]
 pub enum Games {
     SixMinutes,
+    RattlingBog,
 }
