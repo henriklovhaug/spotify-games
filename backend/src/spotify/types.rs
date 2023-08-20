@@ -59,13 +59,13 @@ impl CurrentSong {
     }
 }
 
-#[derive(Debug, Clone, Copy)]
+#[derive(Debug, Clone, Copy, PartialEq)]
 pub enum SpotifyActivity {
     Music,
     Game(Games),
 }
 
-#[derive(Debug, Clone, Copy, Serialize, Deserialize)]
+#[derive(Debug, Clone, Copy, Serialize, Deserialize, PartialEq)]
 pub enum Games {
     SixMinutes,
     RattlingBog,

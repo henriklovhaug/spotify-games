@@ -1,9 +1,9 @@
-use std::{borrow::Cow, net::SocketAddr};
+use std::net::SocketAddr;
 
 use axum::{
     extract::{
-        ws::{CloseFrame, Message, WebSocket},
-        ConnectInfo, WebSocketUpgrade, State,
+        ws::{Message, WebSocket},
+        ConnectInfo, State, WebSocketUpgrade,
     },
     headers::UserAgent,
     middleware,
@@ -21,7 +21,7 @@ use futures::{sink::SinkExt, stream::StreamExt};
 use self::{
     callback::callback_handler,
     currently_playing::get_currently_playing_handler,
-    games::{six_minutes::skip, start_game},
+    games::{six_minutes::skip_handler, start_game},
     index::index_handler,
     pause::pause_music_handler,
     queue::{add_to_queue_handler, get_queue_handler},
@@ -63,7 +63,7 @@ pub fn generate_routes(store: Store) -> Router {
 }
 
 fn six_minutes_routes(store: Store) -> Router {
-    Router::new().route("/skip", put(skip)).with_state(store)
+    Router::new().route("/skip", put(skip_handler)).with_state(store)
 }
 
 async fn ws_handler(
@@ -93,23 +93,21 @@ async fn handle_socket(mut socket: WebSocket, who: SocketAddr, store: Store) {
         return;
     }
 
-    let rx = store.get_receiver();
-
     // Since each client gets individual statemachine, we can pause handling
     // when necessary to wait for some external event (in this case illustrated by sleeping).
     // Waiting for this client to finish getting its greetings does not prevent other clients from
     // connecting to server and receiving their greetings.
-    for i in 1..5 {
-        if socket
-            .send(Message::Text(format!("Hi {i} times!")))
-            .await
-            .is_err()
-        {
-            println!("client {who} abruptly disconnected");
-            return;
-        }
-        tokio::time::sleep(std::time::Duration::from_millis(100)).await;
-    }
+    // for i in 1..5 {
+    //     if socket
+    //         .send(Message::Text(format!("Hi {i} times!")))
+    //         .await
+    //         .is_err()
+    //     {
+    //         println!("client {who} abruptly disconnected");
+    //         return;
+    //     }
+    //     tokio::time::sleep(std::time::Duration::from_millis(100)).await;
+    // }
 
     // By splitting socket we can send and receive at the same time. In this example we will send
     // unsolicited messages to client based on some sort of server's internal event (i.e .timer).
@@ -117,31 +115,21 @@ async fn handle_socket(mut socket: WebSocket, who: SocketAddr, store: Store) {
 
     // Spawn a task that will push several messages to the client (does not matter what client does)
     let mut send_task = tokio::spawn(async move {
-        let n_msg = 20;
-        for i in 0..n_msg {
-            // In case of any websocket error, we exit.
+        let mut rx = store.get_receiver();
+
+        while let Ok(message) = rx.recv().await {
             if sender
-                .send(Message::Text(format!("Server message {i} ...")))
+                .send(Message::Text(format!(
+                    "Server message {} ...",
+                    message.message
+                )))
                 .await
                 .is_err()
             {
-                return i;
+                return "kek";
             }
-
-            tokio::time::sleep(std::time::Duration::from_millis(300)).await;
         }
-
-        println!("Sending close to {who}...");
-        if let Err(e) = sender
-            .send(Message::Close(Some(CloseFrame {
-                code: axum::extract::ws::close_code::NORMAL,
-                reason: Cow::from("Goodbye"),
-            })))
-            .await
-        {
-            println!("Could not send Close due to {}, probably it is ok?", e);
-        }
-        n_msg
+        "kek"
     });
 
     // This second task will receive messages from client and print them on server console

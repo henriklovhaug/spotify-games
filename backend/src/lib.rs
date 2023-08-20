@@ -27,3 +27,9 @@ pub struct ChannelMessage {
     pub channel: String,
     pub message: String,
 }
+
+impl ChannelMessage {
+    pub fn new(channel: String, message: String) -> ChannelMessage {
+        ChannelMessage { channel, message }
+    }
+}
