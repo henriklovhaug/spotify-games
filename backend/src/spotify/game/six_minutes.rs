@@ -36,13 +36,15 @@ const PLAYLIST_ID: &str = "6gegGeB5zoYZ0cboKww43s?si=a314b2fea15b4b93";
 async fn start_playlist(store: &Store) -> Result<(), Box<dyn Error>> {
     let token = store.try_get_session_token().await?;
     let client = CLIENT.get_or_init(Client::new);
-    let mut rng = rand::thread_rng();
-
-    let offset = rng.gen_range(0..100);
+    // let mut rng = rand::thread_rng();
+    //
+    // let offset = rng.gen_range(0..100);
+    //
+    // drop(rng);
 
     let body = PlayListBody {
         context_uri: PLAYLIST_ID.into(),
-        offset: Some(offset),
+        offset: None,
         position_ms: None,
     };
 
