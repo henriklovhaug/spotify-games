@@ -31,7 +31,7 @@ struct PlayListBody {
 }
 
 const PLAY_URL: &str = "https://api.spotify.com/v1/me/player/play";
-const PLAYLIST_ID: &str = "6gegGeB5zoYZ0cboKww43s?si=a314b2fea15b4b93";
+const PLAYLIST_ID: &str = "spotify:playlist:6gegGeB5zoYZ0cboKww43s?si=a314b2fea15b4b93";
 
 async fn start_playlist(store: &Store) -> Result<(), Box<dyn Error>> {
     let token = store.try_get_session_token().await?;
@@ -56,7 +56,10 @@ async fn start_playlist(store: &Store) -> Result<(), Box<dyn Error>> {
         .await?;
 
     if !response.status().is_success() {
-        println!("Error starting playlist: {:?}", response);
+        println!(
+            "Error starting playlist: {:?}",
+            response.text().await.unwrap()
+        );
         return Err("Error starting playlist".into());
     }
 
