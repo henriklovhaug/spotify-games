@@ -1,2 +1,2 @@
-pub mod six_minutes;
 pub mod rattling_bog;
+pub mod six_minutes;

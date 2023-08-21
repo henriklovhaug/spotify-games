@@ -16,7 +16,7 @@ pub async fn play_sixminutes(store: Store) {
     store.end_game().await;
 }
 
-async fn six_minutes_timer(store: &Store) -> () {
+async fn six_minutes_timer(store: &Store) {
     let message = ChannelMessage::new("six minutes".into(), "Game over".into());
     let tx = store.get_sender();
 
