@@ -9,8 +9,9 @@ use tokio::time::sleep;
 use crate::{store::Store, ChannelMessage, CLIENT};
 
 pub async fn play_sixminutes(store: &Store) {
-    if let Err(e) = start_playlist(&store).await {
-        println!("Error starting playlist: {:?}", e);
+    if start_playlist(&store).await.is_err() {
+        store.end_game().await;
+        return;
     }
     six_minutes_timer(&store).await;
     store.end_game().await;
@@ -27,8 +28,6 @@ async fn six_minutes_timer(store: &Store) {
 #[derive(Serialize)]
 struct PlayListBody {
     context_uri: String,
-    offset: Option<u32>,
-    position_ms: Option<u32>,
 }
 
 const PLAY_URL: &str = "https://api.spotify.com/v1/me/player/play";
@@ -37,14 +36,9 @@ const PLAYLIST_ID: &str = "spotify:playlist:6gegGeB5zoYZ0cboKww43s?si=a314b2fea1
 async fn start_playlist(store: &Store) -> Result<(), Box<dyn Error>> {
     let token = store.try_get_session_token().await?;
     let client = CLIENT.get_or_init(Client::new);
-    let mut rng = rand::rngs::OsRng;
-
-    let offset = rng.gen_range(0..100);
 
     let body = PlayListBody {
         context_uri: PLAYLIST_ID.into(),
-        offset: Some(offset),
-        position_ms: None,
     };
 
     let response = client
