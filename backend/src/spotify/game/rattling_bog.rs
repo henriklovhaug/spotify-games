@@ -18,8 +18,8 @@ pub async fn play_rattling_bog(store: Store) -> Result<(), Box<dyn Error>> {
         142306,
     );
 
-    add_song_to_spotify_queue(song, store.clone()).await?;
-    skip(store.clone()).await?;
+    add_song_to_spotify_queue(song, &store).await?;
+    skip(&store).await?;
 
     store.end_game().await;
 

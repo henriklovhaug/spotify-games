@@ -21,14 +21,14 @@ pub async fn spotify_loop(store: Store) {
         match gamestate {
             SpotifyActivity::Music => {
                 if store.view_next_song().await.is_some() {
-                    let song = match get_current_song(store.clone()).await {
+                    let song = match get_current_song(&store).await {
                         Ok(song) => song,
                         Err(_) => return,
                     };
                     let duration_left = song.get_remaining_time().num_seconds();
                     if duration_left < ADD_TO_QUEUE_THRESHOLD {
                         let next_song = store.get_next_song().await.unwrap();
-                        if let Err(e) = add_song_to_spotify_queue(next_song, store.clone()).await {
+                        if let Err(e) = add_song_to_spotify_queue(next_song, &store).await {
                             println!("Error adding song to queue: {}", e);
                         }
                     }
@@ -36,7 +36,7 @@ pub async fn spotify_loop(store: Store) {
             }
             // Games need to handle their own amount of time
             SpotifyActivity::Game(game) => match game {
-                super::types::Games::SixMinutes => play_sixminutes(store.clone()).await,
+                super::types::Games::SixMinutes => play_sixminutes(&store).await,
                 super::types::Games::RattlingBog => play_rattling_bog(store.clone()).await.unwrap(),
             },
         }

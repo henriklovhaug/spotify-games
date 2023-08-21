@@ -10,7 +10,7 @@ pub async fn skip_handler(State(store): State<Store>) -> StatusCode {
         return StatusCode::BAD_REQUEST;
     }
 
-    if skip(store).await.is_err() {
+    if skip(&store).await.is_err() {
         return StatusCode::INTERNAL_SERVER_ERROR;
     }
     StatusCode::OK

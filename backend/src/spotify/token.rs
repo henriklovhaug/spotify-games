@@ -16,7 +16,7 @@ use crate::{
 const TOKEN_URL: &str = "https://accounts.spotify.com/api/token";
 const REDIRECT_URI: &str = "http://localhost:4000/callback";
 
-pub async fn login(store: Store, code: String) -> Result<(), Box<dyn Error>> {
+pub async fn login(store: &Store, code: String) -> Result<(), Box<dyn Error>> {
     let client = CLIENT.get_or_init(Client::new);
 
     let params = [
@@ -52,7 +52,7 @@ pub async fn login(store: Store, code: String) -> Result<(), Box<dyn Error>> {
     Ok(())
 }
 
-pub async fn refresh_token(store: Store, refresh_token: &str) -> Result<(), Box<dyn Error>> {
+pub async fn refresh_token(store: &Store, refresh_token: &str) -> Result<(), Box<dyn Error>> {
     let client = CLIENT.get_or_init(Client::new);
 
     let params = [
@@ -98,7 +98,7 @@ fn base64_encode(id: &str, secret: &str) -> String {
     base64_auth
 }
 
-pub async fn restore_token_from_file(store: Store) -> Result<(), Box<dyn Error>> {
+pub async fn restore_token_from_file(store: &Store) -> Result<(), Box<dyn Error>> {
     let path = dirs::data_dir()
         .ok_or::<String>("File not found".into())?
         .join("spotify-game")
@@ -112,10 +112,10 @@ pub async fn restore_token_from_file(store: Store) -> Result<(), Box<dyn Error>>
 
     println!("Refresh token: {}", contents);
 
-    refresh_token(store, &contents).await
+    refresh_token(&store, &contents).await
 }
 
-pub async fn save_refresh_token(store: Store) -> Result<(), Box<dyn Error>> {
+pub async fn save_refresh_token(store: &Store) -> Result<(), Box<dyn Error>> {
     let refresh_token = if let Some(v) = store.get_token().await.as_ref() {
         v.refresh_token()
     } else {

@@ -9,7 +9,7 @@ use super::types::{CurrentSong, Song};
 
 const CURRENTLY_PLAYING_URL: &str = "https://api.spotify.com/v1/me/player/currently-playing";
 
-pub async fn get_current_song(store: Store) -> Result<CurrentSong, Box<dyn Error>> {
+pub async fn get_current_song(store: &Store) -> Result<CurrentSong, Box<dyn Error>> {
     let client = CLIENT.get_or_init(Client::new);
 
     let token = store.try_get_session_token().await?;
@@ -38,7 +38,7 @@ async fn parse_response_current_song(response: Response) -> Result<CurrentSong, 
 
 const QUEUE_URL: &str = "https://api.spotify.com/v1/me/player/queue?uri=spotify%3Atrack%3A";
 
-pub async fn add_song_to_spotify_queue(song: Song, store: Store) -> Result<(), Box<dyn Error>> {
+pub async fn add_song_to_spotify_queue(song: Song, store: &Store) -> Result<(), Box<dyn Error>> {
     let client = CLIENT.get_or_init(Client::new);
     let url = format!("{}{}", QUEUE_URL, song.get_id());
     let token = store
@@ -60,7 +60,7 @@ pub async fn add_song_to_spotify_queue(song: Song, store: Store) -> Result<(), B
 
 const SKIP_URL: &str = "https://api.spotify.com/v1/me/player/next";
 
-pub async fn skip(store: Store) -> Result<(), Box<dyn Error>> {
+pub async fn skip(store: &Store) -> Result<(), Box<dyn Error>> {
     let token = if let Some(v) = store.get_session_token().await {
         v
     } else {

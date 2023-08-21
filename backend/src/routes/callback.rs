@@ -15,10 +15,10 @@ pub async fn callback_handler(
     Query(param): Query<Params>,
 ) -> Result<Redirect, String> {
     let auth_code = param.code;
-    if let Err(err) = login(store.clone(), auth_code).await {
+    if let Err(err) = login(&store, auth_code).await {
         return Err(format!("Log in failed: {}", err));
     }
-    save_refresh_token(store)
+    save_refresh_token(&store)
         .await
         .map_err(|err| format!("Failed to save refresh token: {}", err))?;
     Ok(Redirect::to("/"))

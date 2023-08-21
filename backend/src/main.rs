@@ -13,7 +13,7 @@ async fn main() {
 
     let store = Store::default();
 
-    if let Err(e) = restore_token_from_file(store.clone()).await {
+    if let Err(e) = restore_token_from_file(&store).await {
         println!(
             "Failed to restore token from file: {}\n continues server",
             e

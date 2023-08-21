@@ -8,7 +8,7 @@ use tokio::time::sleep;
 
 use crate::{store::Store, ChannelMessage, CLIENT};
 
-pub async fn play_sixminutes(store: Store) {
+pub async fn play_sixminutes(store: &Store) {
     if let Err(e) = start_playlist(&store).await {
         println!("Error starting playlist: {:?}", e);
     }

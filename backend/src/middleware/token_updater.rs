@@ -9,7 +9,7 @@ pub async fn check_token_lifetime<T>(
 ) -> Response {
     if !store.valid_token().await {
         if let Some(token) = store.get_token().await.as_ref() {
-            let _ = refresh_token(store.clone(), &token.refresh_token()).await;
+            let _ = refresh_token(&store, &token.refresh_token()).await;
         };
     }
 
