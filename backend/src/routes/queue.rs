@@ -1,5 +1,4 @@
-use axum::http::StatusCode;
-use axum::{extract::State, Json};
+use axum::{extract::State, http::StatusCode, Json};
 
 use crate::{spotify::types::Song, store::Store};
 

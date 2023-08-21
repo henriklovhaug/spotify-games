@@ -9,6 +9,8 @@ use crate::{
     store::Store,
 };
 
+use super::game::six_minutes::play_sixminutes;
+
 const ADD_TO_QUEUE_THRESHOLD: i64 = 10;
 
 pub async fn spotify_loop(store: Store) {
@@ -33,7 +35,7 @@ pub async fn spotify_loop(store: Store) {
                 }
             }
             SpotifyActivity::Game(game) => match game {
-                super::types::Games::SixMinutes => return,
+                super::types::Games::SixMinutes => play_sixminutes(store.clone()).await,
                 super::types::Games::RattlingBog => return,
             },
         }

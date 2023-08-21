@@ -11,7 +11,7 @@ use crate::{
         response_types::LoginResponse,
         types::{Games, Song, SpotifyActivity},
     },
-    ChannelMessage, SpotifyTask,
+    ChannelMessage,
 };
 
 /// # Global store for the application
@@ -21,7 +21,7 @@ use crate::{
 pub struct Store {
     session_token: Arc<RwLock<Option<Token>>>,
     song_queue: Arc<RwLock<VecDeque<Song>>>,
-    tasks: Arc<RwLock<Vec<SpotifyTask>>>,
+    tasks: Arc<RwLock<VecDeque<SpotifyActivity>>>,
     activity: Arc<RwLock<SpotifyActivity>>,
     tx: Sender<ChannelMessage>,
 }
@@ -38,7 +38,7 @@ impl Store {
         Store {
             session_token: Arc::new(RwLock::new(None)),
             song_queue: Arc::new(RwLock::new(VecDeque::new())),
-            tasks: Arc::new(RwLock::new(Vec::new())),
+            tasks: Arc::new(RwLock::new(VecDeque::new())),
             activity: Arc::new(RwLock::new(SpotifyActivity::Music)),
             tx,
         }
@@ -68,6 +68,14 @@ impl Store {
             .map(|v| v.token.clone())
     }
 
+    pub async fn try_get_session_token(&self) -> Result<String, String> {
+        let token = self.get_session_token().await;
+        match token {
+            Some(v) => Ok(v),
+            None => Err("No token found".into()),
+        }
+    }
+
     pub async fn get_token_owned(self) -> OwnedRwLockReadGuard<Option<Token>> {
         self.session_token.read_owned().await
     }
@@ -76,9 +84,17 @@ impl Store {
         self.session_token.read().await
     }
 
-    pub async fn add_task(&self, task: SpotifyTask) {
+    pub async fn try_get_token(&self) -> Result<Token, String> {
+        let token = self.get_token().await;
+        match token.as_ref() {
+            Some(v) => Ok(v.to_owned()),
+            None => Err("No token found".into()),
+        }
+    }
+
+    pub async fn add_task(&self, task: SpotifyActivity) {
         let mut tasks = self.tasks.write().await;
-        tasks.push(task);
+        tasks.push_back(task);
     }
 
     pub async fn get_song_queue(&self) -> VecDeque<Song> {
@@ -120,6 +136,21 @@ impl Store {
 
     pub async fn get_activity(&self) -> SpotifyActivity {
         self.activity.read().await.to_owned()
+    }
+
+    pub async fn peek_next_activity(&self) -> Option<SpotifyActivity> {
+        let tasks = self.tasks.read().await;
+        tasks.front().cloned()
+    }
+
+    pub async fn pop_next_activity(&self) -> Option<SpotifyActivity> {
+        let mut tasks = self.tasks.write().await;
+        tasks.pop_front()
+    }
+
+    pub async fn add_activity(&self, activity: SpotifyActivity) {
+        let mut tasks = self.tasks.write().await;
+        tasks.push_back(activity);
     }
 
     pub fn get_receiver(&self) -> Receiver<ChannelMessage> {

@@ -63,7 +63,9 @@ pub fn generate_routes(store: Store) -> Router {
 }
 
 fn six_minutes_routes(store: Store) -> Router {
-    Router::new().route("/skip", put(skip_handler)).with_state(store)
+    Router::new()
+        .route("/skip", put(skip_handler))
+        .with_state(store)
 }
 
 async fn ws_handler(
