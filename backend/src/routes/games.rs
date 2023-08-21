@@ -1,5 +1,4 @@
 use axum::{
-    debug_handler,
     extract::{Path, State},
     http::StatusCode,
 };
@@ -8,7 +7,6 @@ use crate::{spotify::types::Games, store::Store};
 
 pub mod six_minutes;
 
-#[debug_handler]
 pub async fn start_game(State(store): State<Store>, Path(game): Path<Games>) -> StatusCode {
     store.start_game(game).await;
     StatusCode::OK

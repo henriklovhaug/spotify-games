@@ -11,6 +11,6 @@ pub async fn add_to_queue_handler(
 }
 
 pub async fn get_queue_handler(State(store): State<Store>) -> Json<Vec<Song>> {
-    let queue = store.get_song_queue().await;
+    let queue = store.get_song_queue().await.to_owned();
     Json(queue.into())
 }

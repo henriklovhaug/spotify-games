@@ -12,11 +12,11 @@ const CURRENTLY_PLAYING_URL: &str = "https://api.spotify.com/v1/me/player/curren
 pub async fn get_current_song(store: Store) -> Result<CurrentSong, Box<dyn Error>> {
     let client = CLIENT.get_or_init(Client::new);
 
-    let token = store.get_session_token().await;
+    let token = store.try_get_session_token().await?;
 
     let response = client
         .get(CURRENTLY_PLAYING_URL)
-        .header("Authorization", format!("Bearer {}", token.unwrap()))
+        .bearer_auth(token)
         .send()
         .await?;
 

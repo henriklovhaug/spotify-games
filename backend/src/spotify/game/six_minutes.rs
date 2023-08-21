@@ -12,10 +12,11 @@ pub async fn play_sixminutes(store: Store) {
     if let Err(e) = start_playlist(&store).await {
         println!("Error starting playlist: {:?}", e);
     }
-    six_minutes_timer(store).await;
+    six_minutes_timer(&store).await;
+    store.end_game().await;
 }
 
-async fn six_minutes_timer(store: Store) -> () {
+async fn six_minutes_timer(store: &Store) -> () {
     let message = ChannelMessage::new("six minutes".into(), "Game over".into());
     let tx = store.get_sender();
 
@@ -36,15 +37,13 @@ const PLAYLIST_ID: &str = "spotify:playlist:6gegGeB5zoYZ0cboKww43s?si=a314b2fea1
 async fn start_playlist(store: &Store) -> Result<(), Box<dyn Error>> {
     let token = store.try_get_session_token().await?;
     let client = CLIENT.get_or_init(Client::new);
-    // let mut rng = rand::thread_rng();
-    //
-    // let offset = rng.gen_range(0..100);
-    //
-    // drop(rng);
+    let mut rng = rand::rngs::OsRng;
+
+    let offset = rng.gen_range(0..100);
 
     let body = PlayListBody {
         context_uri: PLAYLIST_ID.into(),
-        offset: None,
+        offset: Some(offset),
         position_ms: None,
     };
 

@@ -1,5 +1,5 @@
 <script lang="ts">
-	const games = ['SixMinutes', 'Rattling bog'];
+	const games = ['SixMinutes', 'RattlingBog'];
 </script>
 
 <div class="flex flex-col items-center">

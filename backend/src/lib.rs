@@ -10,18 +10,6 @@ pub mod store;
 
 pub static CLIENT: OnceLock<Client> = OnceLock::new();
 
-#[derive(Debug)]
-pub enum SpotifyTask {
-    AddSong(String),
-    Game(Game),
-}
-
-#[derive(Debug)]
-pub enum Game {
-    SixMinutes,
-    RatlingBog,
-}
-
 #[derive(Clone)]
 pub struct ChannelMessage {
     pub channel: String,
