@@ -54,8 +54,17 @@ impl CurrentSong {
             progress,
         }
     }
+
     pub fn get_remaining_time(&self) -> Duration {
         Duration::seconds((self.duration - self.progress) as i64 / 1000)
+    }
+
+    pub fn get_artist(&self) -> &str {
+        &self.artist
+    }
+
+    pub fn get_name(&self) -> &str {
+        &self.name
     }
 }
 

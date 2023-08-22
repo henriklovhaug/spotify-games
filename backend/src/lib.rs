@@ -10,7 +10,7 @@ pub mod store;
 
 pub static CLIENT: OnceLock<Client> = OnceLock::new();
 
-#[derive(Clone)]
+#[derive(Debug, Clone)]
 pub struct ChannelMessage {
     pub channel: String,
     pub message: String,

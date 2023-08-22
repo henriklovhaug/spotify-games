@@ -80,7 +80,7 @@ pub async fn refresh_token(store: &Store, refresh_token: &str) -> Result<(), Box
         return Err("Refresh token failed".into());
     }
 
-    let mut parsed_response: LoginResponse = response.json::<LoginResponse>().await?;
+    let mut parsed_response = response.json::<LoginResponse>().await?;
 
     if !parsed_response.refresh_exists() {
         parsed_response.set_refresh_token(refresh_token.to_string());

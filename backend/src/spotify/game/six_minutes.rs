@@ -1,12 +1,11 @@
 use std::error::Error;
 
 use chrono::Duration;
-use rand::Rng;
 use reqwest::Client;
 use serde::Serialize;
 use tokio::time::sleep;
 
-use crate::{store::Store, ChannelMessage, CLIENT};
+use crate::{spotify::api::get_current_song, store::Store, ChannelMessage, CLIENT};
 
 pub async fn play_sixminutes(store: &Store) {
     if start_playlist(&store).await.is_err() {
@@ -21,8 +20,33 @@ async fn six_minutes_timer(store: &Store) {
     let message = ChannelMessage::new("six minutes".into(), "Game over".into());
     let tx = store.get_sender();
 
+    let store_clone = store.clone();
+    let handle = tokio::spawn(async move {
+        notify_song(store_clone).await;
+    });
+
     sleep(Duration::minutes(6).to_std().unwrap()).await;
+    handle.abort();
     let _ = tx.send(message);
+}
+
+async fn notify_song(store: Store) {
+    loop {
+        let tx = store.get_sender();
+        sleep(Duration::seconds(1).to_std().unwrap()).await;
+        let song = get_current_song(&store)
+            .await
+            .expect("Check if spotify is running");
+
+        let message = ChannelMessage::new(
+            "six minutes".into(),
+            format!("{} - {}", song.get_artist(), song.get_name()),
+        );
+
+        if let Err(e) = tx.send(message) {
+            println!("Error sending message: {:?}", e);
+        }
+    }
 }
 
 #[derive(Serialize)]

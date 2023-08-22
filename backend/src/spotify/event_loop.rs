@@ -9,7 +9,10 @@ use crate::{
     store::Store,
 };
 
-use super::game::{rattling_bog::play_rattling_bog, six_minutes::play_sixminutes};
+use super::{
+    game::{rattling_bog::play_rattling_bog, six_minutes::play_sixminutes},
+    types::Games,
+};
 
 const ADD_TO_QUEUE_THRESHOLD: i64 = 10;
 
@@ -36,8 +39,8 @@ pub async fn spotify_loop(store: Store) {
             }
             // Games need to handle their own amount of time
             SpotifyActivity::Game(game) => match game {
-                super::types::Games::SixMinutes => play_sixminutes(&store).await,
-                super::types::Games::RattlingBog => play_rattling_bog(store.clone()).await.unwrap(),
+                Games::SixMinutes => play_sixminutes(&store).await,
+                Games::RattlingBog => play_rattling_bog(&store).await.unwrap(),
             },
         }
     }

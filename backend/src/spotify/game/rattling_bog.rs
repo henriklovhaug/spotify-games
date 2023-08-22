@@ -9,7 +9,7 @@ use crate::{
 };
 
 //TODO change this to use the music queue
-pub async fn play_rattling_bog(store: Store) -> Result<(), Box<dyn Error>> {
+pub async fn play_rattling_bog(store: &Store) -> Result<(), Box<dyn Error>> {
     let song = Song::new(
         "2VjrFvthQjw7BS8aS4VdZi".into(),
         "Rattling Bog".into(),

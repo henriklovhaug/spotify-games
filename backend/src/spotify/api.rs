@@ -70,13 +70,14 @@ pub async fn skip(store: &Store) -> Result<(), Box<dyn Error>> {
     let client = CLIENT.get_or_init(Client::new);
 
     let response = client
-        .put(SKIP_URL)
+        .post(SKIP_URL)
         .header(CONTENT_LENGTH, 0)
         .bearer_auth(token)
         .send()
         .await?;
 
     if !response.status().is_success() {
+        println!("Skip music failed {:?}", response.status());
         let body = response.text().await?;
         println!("Skip music failed {:?}", body);
         return Err("Skip music failed".into());
