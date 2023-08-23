@@ -76,12 +76,12 @@ impl Store {
         }
     }
 
-    pub async fn get_token_owned(self) -> OwnedRwLockReadGuard<Option<Token>> {
+    pub async fn get_token_write_guard(self) -> OwnedRwLockReadGuard<Option<Token>> {
         self.session_token.read_owned().await
     }
 
-    pub async fn get_token(&self) -> RwLockReadGuard<Option<Token>> {
-        self.session_token.read().await
+    pub async fn get_token(&self) -> Option<Token> {
+        self.session_token.read().await.to_owned()
     }
 
     pub async fn try_get_token(&self) -> Result<Token, String> {
@@ -97,8 +97,8 @@ impl Store {
         tasks.push_back(task);
     }
 
-    pub async fn get_song_queue(&self) -> RwLockReadGuard<VecDeque<Song>> {
-        self.song_queue.read().await
+    pub async fn get_song_queue(&self) -> &VecDeque<Song> {
+        &self.song_queue.read().await
     }
 
     pub async fn get_writable_song_queue(&self) -> RwLockWriteGuard<VecDeque<Song>> {
