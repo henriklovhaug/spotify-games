@@ -8,11 +8,11 @@ use tokio::time::sleep;
 use crate::{spotify::api::get_current_song, store::Store, ChannelMessage, CLIENT};
 
 pub async fn play_sixminutes(store: &Store) {
-    if start_playlist(&store).await.is_err() {
+    if start_playlist(store).await.is_err() {
         store.end_game().await;
         return;
     }
-    six_minutes_timer(&store).await;
+    six_minutes_timer(store).await;
     store.end_game().await;
 }
 

@@ -112,7 +112,7 @@ pub async fn restore_token_from_file(store: &Store) -> Result<(), Box<dyn Error>
 
     println!("Refresh token: {}", contents);
 
-    refresh_token(&store, &contents).await
+    refresh_token(store, &contents).await
 }
 
 pub async fn save_refresh_token(store: &Store) -> Result<(), Box<dyn Error>> {
