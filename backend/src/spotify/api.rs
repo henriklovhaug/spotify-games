@@ -26,11 +26,19 @@ pub async fn get_current_song(store: &Store) -> Result<CurrentSong, Box<dyn Erro
 async fn parse_response_current_song(response: Response) -> Result<CurrentSong, Box<dyn Error>> {
     let v: Value = serde_json::from_str(&response.text().await?)?;
 
+    let f = || "error parsing response from spotify";
+
     Ok(CurrentSong::new(
-        v["item"]["id"].to_string(),
-        v["item"]["name"].to_string(),
-        v["item"]["artists"][0]["name"].to_string(),
-        v["item"]["album"]["name"].to_string(),
+        v["item"]["id"].as_str().ok_or_else(f)?.to_string(),
+        v["item"]["name"].as_str().ok_or_else(f)?.to_string(),
+        v["item"]["artists"][0]["name"]
+            .as_str()
+            .ok_or_else(f)?
+            .to_string(),
+        v["item"]["album"]["name"]
+            .as_str()
+            .ok_or_else(f)?
+            .to_string(),
         v["item"]["duration_ms"].as_u64().unwrap() as u32,
         v["progress_ms"].as_u64().unwrap() as u32,
     ))

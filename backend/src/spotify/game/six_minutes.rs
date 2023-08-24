@@ -17,7 +17,7 @@ pub async fn play_sixminutes(store: &Store) {
 }
 
 async fn six_minutes_timer(store: &Store) {
-    let message = ChannelMessage::new("six minutes".into(), "Game over".into());
+    let message = ChannelMessage::new("six minutes".into(), "Game#over".into());
     let tx = store.get_sender();
 
     let store_clone = store.clone();
@@ -40,7 +40,7 @@ async fn notify_song(store: Store) {
 
         let message = ChannelMessage::new(
             "six minutes".into(),
-            format!("{} - {}", song.get_artist(), song.get_name()),
+            format!("{}#{}", song.get_artist(), song.get_name()),
         );
 
         if let Err(e) = tx.send(message) {

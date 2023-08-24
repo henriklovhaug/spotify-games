@@ -3,7 +3,7 @@ use std::{collections::VecDeque, sync::Arc};
 use chrono::{DateTime, Utc};
 use tokio::sync::{
     broadcast::{self, Receiver, Sender},
-    OwnedRwLockReadGuard, RwLock, RwLockReadGuard, RwLockWriteGuard,
+    OwnedRwLockReadGuard, RwLock, RwLockWriteGuard,
 };
 
 use crate::{
@@ -97,8 +97,8 @@ impl Store {
         tasks.push_back(task);
     }
 
-    pub async fn get_song_queue(&self) -> &VecDeque<Song> {
-        &self.song_queue.read().await
+    pub async fn get_song_queue(&self) -> VecDeque<Song> {
+        self.song_queue.read().await.to_owned()
     }
 
     pub async fn get_writable_song_queue(&self) -> RwLockWriteGuard<VecDeque<Song>> {

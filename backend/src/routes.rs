@@ -120,14 +120,7 @@ async fn handle_socket(mut socket: WebSocket, who: SocketAddr, store: Store) {
         let mut rx = store.get_receiver();
 
         while let Ok(message) = rx.recv().await {
-            if sender
-                .send(Message::Text(format!(
-                    "Server message {} ...",
-                    message.message
-                )))
-                .await
-                .is_err()
-            {
+            if sender.send(Message::Text(message.message)).await.is_err() {
                 return "kek";
             }
         }
@@ -141,6 +134,9 @@ async fn handle_socket(mut socket: WebSocket, who: SocketAddr, store: Store) {
             cnt += 1;
             // print message and break if instructed to do so
             println!("Received message: {:?}", msg);
+            if msg == Message::Close(None) {
+                break;
+            }
         }
         cnt
     });
