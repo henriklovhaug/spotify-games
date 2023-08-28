@@ -11,3 +11,8 @@ pub async fn start_game(State(store): State<Store>, Path(game): Path<Games>) -> 
     store.start_game(game).await;
     StatusCode::OK
 }
+
+pub async fn stop_game(State(store): State<Store>) -> StatusCode {
+    store.end_game().await;
+    StatusCode::OK
+}

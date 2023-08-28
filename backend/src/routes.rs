@@ -21,7 +21,7 @@ use futures::{sink::SinkExt, stream::StreamExt};
 use self::{
     callback::callback_handler,
     currently_playing::get_currently_playing_handler,
-    games::{six_minutes::skip_handler, start_game},
+    games::{six_minutes::skip_handler, start_game, stop_game},
     index::index_handler,
     pause::pause_music_handler,
     queue::{add_to_queue_handler, get_queue_handler},
@@ -47,6 +47,7 @@ pub fn generate_routes(store: Store) -> Router {
         .route("/queue", get(get_queue_handler))
         .route("/search", get(search_song_handler))
         .route("/game/:game", put(start_game))
+        .route("/game/stop", put(stop_game))
         .layer(middleware::from_fn_with_state(
             store.clone(),
             check_token_lifetime,

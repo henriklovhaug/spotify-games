@@ -5,7 +5,14 @@ use reqwest::Client;
 use serde::Serialize;
 use tokio::time::sleep;
 
-use crate::{spotify::api::get_current_song, store::Store, ChannelMessage, CLIENT};
+use crate::{
+    spotify::{
+        api::get_current_song,
+        types::{Games, SpotifyActivity},
+    },
+    store::Store,
+    ChannelMessage, CLIENT,
+};
 
 pub async fn play_sixminutes(store: &Store) {
     if start_playlist(store).await.is_err() {
@@ -32,6 +39,9 @@ async fn six_minutes_timer(store: &Store) {
 
 async fn notify_song(store: Store) {
     loop {
+        if store.get_activity().await != SpotifyActivity::Game(Games::SixMinutes) {
+            break;
+        }
         let tx = store.get_sender();
         sleep(Duration::seconds(1).to_std().unwrap()).await;
         let song = get_current_song(&store)

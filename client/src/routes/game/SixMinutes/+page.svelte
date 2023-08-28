@@ -5,10 +5,6 @@
 
 	let socket;
 
-	function try_reconnect() {
-		socket = new WebSocket("ws://" + PUBLIC_BACKEND_URL + "/ws");
-	}
-
 	onMount(() => {
 		socket = new WebSocket("ws://" + PUBLIC_BACKEND_URL + "/ws");
 		socket.onopen = () => {
@@ -16,20 +12,23 @@
 		};
 
 		socket.onmessage = (event) => {
+			if (event.data === ws_message) return;
 			ws_message = event.data;
+			timer = 20;
 			console.log(ws_message);
 		};
 
 		socket.onclose = () => {
 			console.log("disconnected");
-			setTimeout(try_reconnect, 5000);
 		};
 	});
 
 	let ws_message: String = "";
-
 	$: artist = ws_message.split("#")[0];
 	$: title = ws_message.split("#")[1];
+
+	let timer: number = 0;
+	setInterval(() => (timer > 0 ? (timer -= 1) : 0), 1000);
 </script>
 
 <div class="m-0 flex h-full w-screen flex-col items-center justify-evenly">
@@ -39,6 +38,7 @@
 		{:else}
 			<h2 class="text-center text-3xl font-extrabold">{title}</h2>
 			<h3 class="text-xl">{artist}</h3>
+			<h3 class="text-xl">{timer}</h3>
 		{/if}
 	</div>
 	<form action="?/skip" method="post" use:enhance class="m-0">

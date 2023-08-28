@@ -121,6 +121,9 @@ impl Store {
     }
 
     pub async fn start_game(&self, game: Games) {
+        if self.get_activity().await == SpotifyActivity::Game(game) {
+            return;
+        }
         let mut activity = self.activity.write().await;
         *activity = SpotifyActivity::Game(game);
     }
