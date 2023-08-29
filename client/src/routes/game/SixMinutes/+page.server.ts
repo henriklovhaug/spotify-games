@@ -14,7 +14,7 @@ export const load: PageServerLoad = async ({ fetch }) => {
 
 export const actions: Actions = {
   skip: async ({ fetch }) => {
-    const response = await fetch(
+   const response = await fetch(
       `http://${PUBLIC_BACKEND_URL}/sixminutes/skip`,
       {
         method: "PUT",
