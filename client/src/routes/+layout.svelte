@@ -3,7 +3,7 @@
 	import "../app.css";
 </script>
 
-<div class="flex h-screen flex-col">
+<div class="flex h-screen flex-col text-[#f4fefd]">
 	<Banner class="h-14" />
 	<slot />
 </div>

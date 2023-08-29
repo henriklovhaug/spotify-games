@@ -35,6 +35,9 @@
 	<div class="flex flex-col items-center border-gray-50 px-2">
 		{#if ws_message == ""}
 			<h2>Waiting for song...</h2>
+		{:else if ws_message === "Game#over"}
+			<h2 class="text-center text-3xl font-extrabold">Game Over</h2>
+			<h3 class="text-xl">Thanks for playing!</h3>
 		{:else}
 			<h2 class="text-center text-3xl font-extrabold">{title}</h2>
 			<h3 class="text-xl">{artist}</h3>
@@ -42,6 +45,10 @@
 		{/if}
 	</div>
 	<form action="?/skip" method="post" use:enhance class="m-0">
-		<button type="submit" class="h-80 w-80 animate-pulse rounded-full bg-green-500">Skip</button>
+		<button
+			type="submit"
+			class="h-72 w-72 animate-pulse rounded-full bg-green text-xl font-bold text-black"
+			>Skip</button
+		>
 	</form>
 </div>
