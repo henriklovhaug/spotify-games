@@ -9,14 +9,14 @@ use crate::{
 };
 
 //TODO change this to use the music queue
-pub async fn play_rattling_bog(store: &Store) -> Result<(), Box<dyn Error>> {
+pub async fn play_opus(store: &Store) -> Result<(), Box<dyn Error>> {
     let song = Song::new(
-        "2VjrFvthQjw7BS8aS4VdZi",
-        "Rattling Bog",
-        "Carlyle Fraser",
-        "Lord of the dance",
-        142306,
-        Some("https://i.scdn.co/image/ab67616d0000b27324492f2ba3a1d995e1faf5d8"),
+        "3v2oAQomhOcYCPPHafS3KV",
+        "Opus",
+        "Eric Prydz",
+        "",
+        543453,
+        None,
     );
 
     add_song_to_spotify_queue(song, store).await?;

@@ -60,7 +60,10 @@ pub async fn add_song_to_spotify_queue(song: Song, store: &Store) -> Result<(), 
         .bearer_auth(token)
         .send()
         .await?;
-    if response.status().is_success() {
+
+    if !response.status().is_success() {
+        let body = response.text().await?;
+        println!("Added song to queue {:?}", body);
         return Err("Error adding song to queue".into());
     }
     Ok(())

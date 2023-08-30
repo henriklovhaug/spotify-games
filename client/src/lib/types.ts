@@ -4,6 +4,7 @@ export interface Song {
   artist: string;
   album: string;
   duration: number;
+  album_url?: string;
 }
 
 export interface WSMessage {

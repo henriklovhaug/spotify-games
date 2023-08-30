@@ -15,7 +15,7 @@ pub struct Params {
     search: String,
 }
 
-const URL: &str = "https://api.spotify.com/v1/search?type=track&limit=6&q=";
+const URL: &str = "https://api.spotify.com/v1/search?type=track&limit=8&q=";
 
 pub async fn search_song_handler(
     State(store): State<Store>,
@@ -47,12 +47,13 @@ async fn parse_response(response: Response) -> Result<Vec<Song>, Box<dyn Error>>
     let items = parsed["tracks"]["items"].as_array().ok_or("parse error")?;
     let mut songs = Vec::new();
     for song in items.iter() {
-        let id: String = song["id"].as_str().unwrap().to_string();
-        let name: String = song["name"].as_str().unwrap().to_string();
-        let artist = song["artists"][0]["name"].as_str().unwrap().to_string();
-        let album = song["album"]["name"].as_str().unwrap().to_string();
+        let id = song["id"].as_str().unwrap();
+        let name = song["name"].as_str().unwrap();
+        let artist = song["artists"][0]["name"].as_str().unwrap();
+        let album = song["album"]["name"].as_str().unwrap();
         let duration = song["duration_ms"].as_u64().unwrap() as u32;
-        let song = Song::new(id, name, artist, album, duration);
+        let album_url = song["album"]["images"][0]["url"].as_str();
+        let song = Song::new(id, name, artist, album, duration, album_url);
         songs.push(song);
     }
     Ok(songs)

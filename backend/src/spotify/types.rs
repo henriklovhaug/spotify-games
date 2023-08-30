@@ -8,16 +8,25 @@ pub struct Song {
     artist: String,
     album: String,
     duration: u32,
+    album_url: Option<String>,
 }
 
 impl Song {
-    pub fn new(id: String, name: String, artist: String, album: String, duration: u32) -> Song {
+    pub fn new<T: ToString>(
+        id: T,
+        name: T,
+        artist: T,
+        album: T,
+        duration: u32,
+        album_url: Option<T>,
+    ) -> Song {
         Song {
-            id,
-            name,
-            artist,
-            album,
+            id: id.to_string(),
+            name: name.to_string(),
+            artist: artist.to_string(),
+            album: album.to_string(),
             duration,
+            album_url: album_url.map(|s| s.to_string()),
         }
     }
 
@@ -78,4 +87,5 @@ pub enum SpotifyActivity {
 pub enum Games {
     SixMinutes,
     RattlingBog,
+    Opus,
 }
