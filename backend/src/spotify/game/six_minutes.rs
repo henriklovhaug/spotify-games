@@ -29,7 +29,7 @@ async fn six_minutes_timer(store: &Store) {
     let handle = tokio::spawn(async move {
         notify_song(store_clone).await;
     });
-    sleep(Duration::seconds(30).to_std().unwrap()).await;
+    sleep(Duration::minutes(6).to_std().unwrap()).await;
     handle.abort();
 
     let tx = store.get_sender();

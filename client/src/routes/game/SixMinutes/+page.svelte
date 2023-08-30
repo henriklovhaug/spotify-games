@@ -1,9 +1,16 @@
 <script lang="ts">
-  import { enhance } from "$app/forms";
   import { onNavigate } from "$app/navigation";
   import { PUBLIC_BACKEND_URL } from "$env/static/public";
   import type { WSMessage } from "$lib/types";
   import { onMount } from "svelte";
+
+  async function handleSubmit() {
+    let data = new FormData();
+    await fetch("?/skip", {
+      method: "POST",
+      body: data,
+    });
+  }
 
   let socket: WebSocket;
 
@@ -55,7 +62,7 @@
       <h3 class="text-xl">{timer}</h3>
     {/if}
   </div>
-  <form action="?/skip" method="post" use:enhance class="m-0">
+  <form method="post" on:submit|preventDefault={handleSubmit} class="m-0">
     <button
       type="submit"
       class="h-72 w-72 animate-pulse rounded-full bg-green text-xl font-bold text-black"
