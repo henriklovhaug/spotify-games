@@ -8,6 +8,7 @@ use crate::{spotify::types::Games, store::Store};
 pub mod six_minutes;
 
 pub async fn start_game(State(store): State<Store>, Path(game): Path<Games>) -> StatusCode {
+    println!("Starting game: {:?}", game);
     store.start_game(game).await;
     StatusCode::OK
 }

@@ -11,7 +11,7 @@ use crate::{
         types::{Games, SpotifyActivity},
     },
     store::Store,
-    ChannelMessage, CLIENT,
+    Channel, ChannelMessage, CLIENT,
 };
 
 pub async fn play_sixminutes(store: &Store) {
@@ -21,25 +21,26 @@ pub async fn play_sixminutes(store: &Store) {
     }
     six_minutes_timer(store).await;
     store.end_game().await;
+    println!("Done with game");
 }
 
 async fn six_minutes_timer(store: &Store) {
-    let message = ChannelMessage::new("six minutes".into(), "Game#over".into());
-    let tx = store.get_sender();
-
     let store_clone = store.clone();
     let handle = tokio::spawn(async move {
         notify_song(store_clone).await;
     });
-
-    sleep(Duration::minutes(6).to_std().unwrap()).await;
+    sleep(Duration::seconds(30).to_std().unwrap()).await;
     handle.abort();
+
+    let tx = store.get_sender();
+    let message = ChannelMessage::new(Channel::SixMinutes, "Game over".into(), None, None);
     let _ = tx.send(message);
 }
 
 async fn notify_song(store: Store) {
     loop {
         if store.get_activity().await != SpotifyActivity::Game(Games::SixMinutes) {
+            println!("Game ended");
             break;
         }
         let tx = store.get_sender();
@@ -49,8 +50,10 @@ async fn notify_song(store: Store) {
             .expect("Check if spotify is running");
 
         let message = ChannelMessage::new(
-            "six minutes".into(),
-            format!("{}#{}", song.get_artist(), song.get_name()),
+            Channel::SixMinutes,
+            "".into(),
+            Some(song.get_artist().into()),
+            Some(song.get_name().into()),
         );
 
         if let Err(e) = tx.send(message) {
