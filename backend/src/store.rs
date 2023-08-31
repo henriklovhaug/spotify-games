@@ -21,7 +21,6 @@ use crate::{
 pub struct Store {
     session_token: Arc<RwLock<Option<Token>>>,
     song_queue: Arc<RwLock<VecDeque<Song>>>,
-    tasks: Arc<RwLock<VecDeque<SpotifyActivity>>>,
     activity: Arc<RwLock<SpotifyActivity>>,
     tx: Sender<ChannelMessage>,
 }
@@ -38,7 +37,6 @@ impl Store {
         Store {
             session_token: Arc::new(RwLock::new(None)),
             song_queue: Arc::new(RwLock::new(VecDeque::new())),
-            tasks: Arc::new(RwLock::new(VecDeque::new())),
             activity: Arc::new(RwLock::new(SpotifyActivity::Music)),
             tx,
         }
@@ -92,11 +90,6 @@ impl Store {
         }
     }
 
-    pub async fn add_task(&self, task: SpotifyActivity) {
-        let mut tasks = self.tasks.write().await;
-        tasks.push_back(task);
-    }
-
     pub async fn get_song_queue(&self) -> VecDeque<Song> {
         self.song_queue.read().await.to_owned()
     }
@@ -143,21 +136,6 @@ impl Store {
 
     pub async fn get_activity(&self) -> SpotifyActivity {
         self.activity.read().await.to_owned()
-    }
-
-    pub async fn peek_next_activity(&self) -> Option<SpotifyActivity> {
-        let tasks = self.tasks.read().await;
-        tasks.front().cloned()
-    }
-
-    pub async fn pop_next_activity(&self) -> Option<SpotifyActivity> {
-        let mut tasks = self.tasks.write().await;
-        tasks.pop_front()
-    }
-
-    pub async fn add_activity(&self, activity: SpotifyActivity) {
-        let mut tasks = self.tasks.write().await;
-        tasks.push_back(activity);
     }
 
     pub fn get_receiver(&self) -> Receiver<ChannelMessage> {

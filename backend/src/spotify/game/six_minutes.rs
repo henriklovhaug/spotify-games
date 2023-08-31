@@ -26,11 +26,24 @@ pub async fn play_sixminutes(store: &Store) {
 
 async fn six_minutes_timer(store: &Store) {
     let store_clone = store.clone();
-    let handle = tokio::spawn(async move {
+    let mut handle = tokio::spawn(async move {
         notify_song(store_clone).await;
     });
-    sleep(Duration::minutes(6).to_std().unwrap()).await;
-    handle.abort();
+
+    let mut sleep_handle = tokio::spawn(async move {
+        sleep(Duration::minutes(6).to_std().unwrap()).await;
+    });
+
+    tokio::select! {
+        _ = (&mut handle) => {
+            println!("Game ended early");
+            sleep_handle.abort();
+        },
+        _ = (&mut sleep_handle) => {
+            println!("Game ended on time");
+            handle.abort();
+        }
+    }
 
     let tx = store.get_sender();
     let message = ChannelMessage::new(Channel::SixMinutes, "Game over".into(), None, None);
@@ -45,9 +58,13 @@ async fn notify_song(store: Store) {
         }
         let tx = store.get_sender();
         sleep(Duration::seconds(1).to_std().unwrap()).await;
-        let song = get_current_song(&store)
-            .await
-            .expect("Check if spotify is running");
+        let song = match get_current_song(&store).await {
+            Ok(song) => song,
+            Err(e) => {
+                println!("Error getting current song: {:?}", e);
+                continue;
+            }
+        };
 
         let message = ChannelMessage::new(
             Channel::SixMinutes,

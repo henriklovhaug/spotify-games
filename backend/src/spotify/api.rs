@@ -20,6 +20,14 @@ pub async fn get_current_song(store: &Store) -> Result<CurrentSong, Box<dyn Erro
         .send()
         .await?;
 
+    if !response.status().is_success() {
+        println!(
+            "Error getting current song: {:?}",
+            response.text().await.unwrap()
+        );
+        return Err("Error getting current song".into());
+    }
+
     parse_response_current_song(response).await
 }
 
@@ -66,6 +74,7 @@ pub async fn add_song_to_spotify_queue(song: Song, store: &Store) -> Result<(), 
         println!("Added song to queue {:?}", body);
         return Err("Error adding song to queue".into());
     }
+    println!("Added song to queue with status {:?}", response.status());
     Ok(())
 }
 

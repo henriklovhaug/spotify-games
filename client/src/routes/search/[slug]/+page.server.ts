@@ -44,5 +44,7 @@ export const actions: Actions = {
     if (!response.ok) {
       return fail(400, { message: "Bad Request" });
     }
+
+    console.log("Song successfully queued");
   },
 };
