@@ -35,11 +35,11 @@ async fn six_minutes_timer(store: &Store) {
     });
 
     tokio::select! {
-        _ = (&mut handle) => {
+        _r_va = &mut handle => {
             println!("Game ended early");
             sleep_handle.abort();
         },
-        _ = (&mut sleep_handle) => {
+        _r_vb = &mut sleep_handle => {
             println!("Game ended on time");
             handle.abort();
         }
