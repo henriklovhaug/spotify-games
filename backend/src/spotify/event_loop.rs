@@ -14,7 +14,7 @@ use super::{
         opus::play_opus, palmerna::play_palmerna, rattling_bog::play_rattling_bog,
         six_minutes::play_sixminutes,
     },
-    types::{Games, CurrentSong},
+    types::{Games, CurrentSong}, api::skip,
 };
 
 const ADD_TO_QUEUE_THRESHOLD: i64 = 10;
@@ -27,6 +27,9 @@ async fn save_immediate_song(enqueue_time: DateTime<Utc>, current_song: Option<C
                     .get_writable_song_queue()
                     .await
                     .push_front(song.into());
+                if let Err(e) = skip(&store).await {
+                    eprintln!("Failed to skip during grace period for enqueued song: {e}");
+                };
             }
             None => {}
         }
