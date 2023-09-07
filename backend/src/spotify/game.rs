@@ -14,7 +14,7 @@ lazy_static! {
             Games::Palmerna,
             Song::new(
                 "5hsZ6loP0rseyjleWs0cZ1",
-                "Der Palmane Bor",
+                "Där Palmane Bor",
                 "Medena",
                 "",
                 225226,
