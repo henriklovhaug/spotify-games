@@ -10,7 +10,10 @@ use crate::{
 };
 
 use super::{
-    game::{opus::play_opus, rattling_bog::play_rattling_bog, six_minutes::play_sixminutes, palmerna::play_palmerna},
+    game::{
+        opus::play_opus, palmerna::play_palmerna, rattling_bog::play_rattling_bog,
+        six_minutes::play_sixminutes,
+    },
     types::Games,
 };
 

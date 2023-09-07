@@ -88,5 +88,5 @@ pub enum Games {
     SixMinutes,
     RattlingBog,
     Opus,
-    Palmerna
+    Palmerna,
 }
