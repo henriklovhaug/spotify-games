@@ -80,16 +80,9 @@ impl CurrentSong {
     }
 }
 
-impl Into<Song> for CurrentSong {
-    fn into(self) -> Song {
-        Song::new(
-            self.id,
-            self.name,
-            self.artist,
-            self.album,
-            self.duration,
-            None,
-        )
+impl From<CurrentSong> for Song {
+    fn from(val: CurrentSong) -> Self {
+        Song::new(val.id, val.name, val.artist, val.album, val.duration, None)
     }
 }
 
