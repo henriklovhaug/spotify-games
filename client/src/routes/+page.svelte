@@ -1,5 +1,6 @@
 <script lang="ts">
   import { enhance } from "$app/forms";
+  import SearchBox from "$lib/components/searchBox.svelte";
   import type { GameMode } from "$lib/gamemodes";
 
   const games: GameMode[] = [
@@ -26,8 +27,9 @@
   ];
 </script>
 
-<div class="flex flex-col items-center">
-  <div class="mt-8">
+<div class="flex items-center justify-around">
+  <div class="mt-8 self-start">
+    <h2 class="text-center text-xl">Start a Game</h2>
     <ul>
       {#each games as game}
         <li>
@@ -51,5 +53,9 @@
         </button>
       </form>
     </ul>
+  </div>
+  <div class="flex mt-8 self-start flex-col justify-items-center">
+    <h2 class="text-center mb-2 text-xl">Song Queue</h2>
+    <SearchBox />
   </div>
 </div>
