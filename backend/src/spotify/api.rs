@@ -49,6 +49,9 @@ async fn parse_response_current_song(response: Response) -> Result<CurrentSong, 
             .to_string(),
         v["item"]["duration_ms"].as_u64().unwrap() as u32,
         v["progress_ms"].as_u64().unwrap() as u32,
+        v["item"]["album"]["images"][0]["url"]
+            .as_str()
+            .map(|s| s.to_string()),
     ))
 }
 

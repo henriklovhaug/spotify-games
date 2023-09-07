@@ -1,3 +1,5 @@
+extern crate lazy_static;
+
 use std::sync::OnceLock;
 
 use reqwest::Client;

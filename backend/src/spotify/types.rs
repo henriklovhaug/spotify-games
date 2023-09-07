@@ -43,6 +43,7 @@ pub struct CurrentSong {
     album: String,
     duration: u32,
     progress: u32,
+    album_url: Option<String>,
 }
 
 impl CurrentSong {
@@ -53,6 +54,7 @@ impl CurrentSong {
         album: String,
         duration: u32,
         progress: u32,
+        album_url: Option<String>,
     ) -> CurrentSong {
         CurrentSong {
             id,
@@ -61,6 +63,7 @@ impl CurrentSong {
             album,
             duration,
             progress,
+            album_url,
         }
     }
 
@@ -85,7 +88,7 @@ impl Into<Song> for CurrentSong {
             self.artist,
             self.album,
             self.duration,
-            None
+            None,
         )
     }
 }
@@ -96,7 +99,7 @@ pub enum SpotifyActivity {
     Game(Games),
 }
 
-#[derive(Debug, Clone, Copy, Serialize, Deserialize, PartialEq)]
+#[derive(Debug, Hash, Eq, Clone, Copy, Serialize, Deserialize, PartialEq)]
 pub enum Games {
     SixMinutes,
     RattlingBog,
