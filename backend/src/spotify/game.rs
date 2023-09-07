@@ -39,9 +39,9 @@ lazy_static! {
             Games::RattlingBog,
             Song::new(
                 "2vjrfvthqjw7bs8as4vdzi",
-                "rattling bog",
-                "carlyle fraser",
-                "lord of the dance",
+                "Rattling Bog",
+                "Carlyle Fraser",
+                "Lord Of The Dance",
                 142306,
                 Some("https://i.scdn.co/image/ab67616d0000b273e973781d62a8142984e624d6"),
             ),
