@@ -19,8 +19,8 @@ use super::{
 
 const ADD_TO_QUEUE_THRESHOLD: i64 = 10;
 
-async fn save_immediate_song(enqueue_time: DateTime<Utc>, current_song: Option<CurrentSong>, store: &Store) {
-    if enqueue_time + Duration::seconds(9) < Utc::now() {
+async fn save_immediate_song(enqueue_time: &DateTime<Utc>, current_song: Option<CurrentSong>, store: &Store) {
+    if *enqueue_time + Duration::seconds(9) < Utc::now() {
         match current_song {
             Some(song) => {
                 store
@@ -67,26 +67,26 @@ pub async fn spotify_loop(store: Store) {
             // Games need to handle their own amount of time
             SpotifyActivity::Game(game) => match game {
                 Games::SixMinutes => {
-                    save_immediate_song(enqueue_time, current_song, &store).await;
+                    save_immediate_song(&enqueue_time, current_song, &store).await;
                     current_song = None;
                     play_sixminutes(&store).await
                 }
                 Games::RattlingBog => {
-                    save_immediate_song(enqueue_time, current_song, &store).await;
+                    save_immediate_song(&enqueue_time, current_song, &store).await;
                     current_song = None;
                     if let Err(e) = play_rattling_bog(&store).await {
                         println!("Error playing rattling bog: {}", e);
                     }
                 }
                 Games::Opus => {
-                    save_immediate_song(enqueue_time, current_song, &store).await;
+                    save_immediate_song(&enqueue_time, current_song, &store).await;
                     current_song = None;
                     if let Err(e) = play_opus(&store).await {
                         println!("Error playing opus: {}", e);
                     }
                 }
                 Games::Palmerna => {
-                    save_immediate_song(enqueue_time, current_song, &store).await;
+                    save_immediate_song(&enqueue_time, current_song, &store).await;
                     current_song = None;
                     if let Err(e) = play_palmerna(&store).await {
                         println!("Error playing palmerna: {}", e);
