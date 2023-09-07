@@ -4,9 +4,7 @@ use super::types::{Games, Song};
 
 use lazy_static::lazy_static;
 
-pub mod opus;
-pub mod palmerna;
-pub mod rattling_bog;
+pub mod single_song;
 pub mod six_minutes;
 
 lazy_static! {
@@ -44,6 +42,18 @@ lazy_static! {
                 "Lord Of The Dance",
                 142306,
                 Some("https://i.scdn.co/image/ab67616d0000b273e973781d62a8142984e624d6"),
+            ),
+        );
+
+        m.insert(
+            Games::Thunder,
+            Song::new(
+                "57bgtoPSgt236HzfBOd8kj",
+                "Thunderstruck",
+                "AC/DC",
+                "The Razors Edge",
+                292880,
+                Some("https://i.scdn.co/image/ab67616d0000b2738399047ff71200928f5b6508"),
             ),
         );
 

@@ -105,4 +105,5 @@ pub enum Games {
     RattlingBog,
     Opus,
     Palmerna,
+    Thunder,
 }

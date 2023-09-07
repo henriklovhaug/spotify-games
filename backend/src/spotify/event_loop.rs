@@ -11,10 +11,7 @@ use crate::{
 
 use super::{
     api::skip,
-    game::{
-        opus::play_opus, palmerna::play_palmerna, rattling_bog::play_rattling_bog,
-        six_minutes::play_sixminutes,
-    },
+    game::{single_song::play_single_song_game, six_minutes::play_sixminutes},
     types::{CurrentSong, Games},
 };
 
@@ -84,7 +81,7 @@ pub async fn spotify_loop(store: Store) {
                 Games::RattlingBog => {
                     let saved = save_immediate_song(&enqueue_time, current_song, &store).await;
                     current_song = None;
-                    if let Err(e) = play_rattling_bog(&store).await {
+                    if let Err(e) = play_single_song_game(&store, Games::RattlingBog).await {
                         println!("Error playing rattling bog: {}", e);
                     }
                     if saved {
@@ -96,7 +93,7 @@ pub async fn spotify_loop(store: Store) {
                 Games::Opus => {
                     let saved = save_immediate_song(&enqueue_time, current_song, &store).await;
                     current_song = None;
-                    if let Err(e) = play_opus(&store).await {
+                    if let Err(e) = play_single_song_game(&store, Games::Opus).await {
                         println!("Error playing opus: {}", e);
                     }
                     if saved {
@@ -108,7 +105,19 @@ pub async fn spotify_loop(store: Store) {
                 Games::Palmerna => {
                     let saved = save_immediate_song(&enqueue_time, current_song, &store).await;
                     current_song = None;
-                    if let Err(e) = play_palmerna(&store).await {
+                    if let Err(e) = play_single_song_game(&store, Games::Palmerna).await {
+                        println!("Error playing palmerna: {}", e);
+                    }
+                    if saved {
+                        if let Err(e) = skip(&store).await {
+                            println!("Error skipping: {}", e);
+                        }
+                    }
+                }
+                Games::Thunder => {
+                    let saved = save_immediate_song(&enqueue_time, current_song, &store).await;
+                    current_song = None;
+                    if let Err(e) = play_single_song_game(&store, Games::Thunder).await {
                         println!("Error playing palmerna: {}", e);
                     }
                     if saved {
