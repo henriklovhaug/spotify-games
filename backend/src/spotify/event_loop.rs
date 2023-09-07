@@ -1,4 +1,4 @@
-use chrono::{Duration, Utc, DateTime};
+use chrono::{DateTime, Duration, Utc};
 use tokio::time::sleep;
 
 use crate::{
@@ -10,29 +10,34 @@ use crate::{
 };
 
 use super::{
+    api::skip,
     game::{
         opus::play_opus, palmerna::play_palmerna, rattling_bog::play_rattling_bog,
         six_minutes::play_sixminutes,
     },
-    types::{Games, CurrentSong}, api::skip,
+    types::{CurrentSong, Games},
 };
 
 const ADD_TO_QUEUE_THRESHOLD: i64 = 10;
 
-async fn save_immediate_song(enqueue_time: &DateTime<Utc>, current_song: Option<CurrentSong>, store: &Store) {
-    if *enqueue_time + Duration::seconds(9) < Utc::now() {
+async fn save_immediate_song(
+    enqueue_time: &DateTime<Utc>,
+    current_song: Option<CurrentSong>,
+    store: &Store,
+) -> bool {
+    if *enqueue_time + Duration::seconds(ADD_TO_QUEUE_THRESHOLD) > Utc::now() {
         match current_song {
             Some(song) => {
                 store
                     .get_writable_song_queue()
                     .await
                     .push_front(song.into());
-                if let Err(e) = skip(&store).await {
-                    eprintln!("Failed to skip during grace period for enqueued song: {e}");
-                };
+                true
             }
-            None => {}
+            None => false,
         }
+    } else {
+        false
     }
 }
 
@@ -53,7 +58,7 @@ pub async fn spotify_loop(store: Store) {
                     };
                     let duration_left = song.get_remaining_time().num_seconds();
                     if duration_left < ADD_TO_QUEUE_THRESHOLD
-                        && enqueue_time + Duration::seconds(9) < Utc::now()
+                        && enqueue_time + Duration::seconds(ADD_TO_QUEUE_THRESHOLD + 1) < Utc::now()
                     {
                         let next_song = store.get_next_song().await.unwrap();
                         if let Err(e) = add_song_to_spotify_queue(next_song, &store).await {
@@ -67,29 +72,49 @@ pub async fn spotify_loop(store: Store) {
             // Games need to handle their own amount of time
             SpotifyActivity::Game(game) => match game {
                 Games::SixMinutes => {
-                    save_immediate_song(&enqueue_time, current_song, &store).await;
+                    let saved = save_immediate_song(&enqueue_time, current_song, &store).await;
                     current_song = None;
-                    play_sixminutes(&store).await
+                    play_sixminutes(&store).await;
+                    if saved {
+                        if let Err(e) = skip(&store).await {
+                            println!("Error skipping: {}", e);
+                        }
+                    }
                 }
                 Games::RattlingBog => {
-                    save_immediate_song(&enqueue_time, current_song, &store).await;
+                    let saved = save_immediate_song(&enqueue_time, current_song, &store).await;
                     current_song = None;
                     if let Err(e) = play_rattling_bog(&store).await {
                         println!("Error playing rattling bog: {}", e);
                     }
+                    if saved {
+                        if let Err(e) = skip(&store).await {
+                            println!("Error skipping: {}", e);
+                        }
+                    }
                 }
                 Games::Opus => {
-                    save_immediate_song(&enqueue_time, current_song, &store).await;
+                    let saved = save_immediate_song(&enqueue_time, current_song, &store).await;
                     current_song = None;
                     if let Err(e) = play_opus(&store).await {
                         println!("Error playing opus: {}", e);
                     }
+                    if saved {
+                        if let Err(e) = skip(&store).await {
+                            println!("Error skipping: {}", e);
+                        }
+                    }
                 }
                 Games::Palmerna => {
-                    save_immediate_song(&enqueue_time, current_song, &store).await;
+                    let saved = save_immediate_song(&enqueue_time, current_song, &store).await;
                     current_song = None;
                     if let Err(e) = play_palmerna(&store).await {
                         println!("Error playing palmerna: {}", e);
+                    }
+                    if saved {
+                        if let Err(e) = skip(&store).await {
+                            println!("Error skipping: {}", e);
+                        }
                     }
                 }
             },
