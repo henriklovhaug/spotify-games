@@ -43,9 +43,8 @@
     action="/?/search"
     use:enhance
   >
-    <label for="search-box">
       <input
-        class="h-6 w-4/5 rounded-md bg-neutral-200 text-black"
+        class="h-6 w-1/2 rounded-md bg-black text-green p-4 m-2 outline-none"
         name="search"
         type="text"
         id="search-box"
@@ -53,6 +52,6 @@
         value={search}
         bind:this={input}
       />
-    </label>
+
   </form>
 {/if}
