@@ -43,15 +43,14 @@
     action="/?/search"
     use:enhance
   >
-      <input
-        class="h-6 w-1/2 rounded-md bg-black text-green p-4 m-2 outline-none"
-        name="search"
-        type="text"
-        id="search-box"
-        on:focusout={handle_submit}
-        value={search}
-        bind:this={input}
-      />
-
+    <input
+      class="m-2 h-6 w-1/2 rounded-md bg-black p-4 text-green outline-none"
+      name="search"
+      type="text"
+      id="search-box"
+      on:focusout={handle_submit}
+      value={search}
+      bind:this={input}
+    />
   </form>
 {/if}

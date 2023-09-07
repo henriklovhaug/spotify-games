@@ -17,8 +17,12 @@
     },
     {
       name: "Der Palmerna bor",
-      url: "Palmerna"
-    }
+      url: "Palmerna",
+    },
+    {
+      name: "Thunder",
+      url: "Thunder",
+    },
   ];
 </script>
 
