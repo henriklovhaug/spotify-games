@@ -13,7 +13,7 @@ use crate::{
 use self::{
     callback::callback_handler,
     currently_playing::get_currently_playing_handler,
-    games::{six_minutes::skip_handler, start_game, stop_game},
+    games::{get_game_art, six_minutes::skip_handler, start_game, stop_game},
     index::index_handler,
     pause::pause_music_handler,
     queue::{add_to_queue_handler, get_queue_handler},
@@ -40,6 +40,7 @@ pub fn generate_routes(store: Store) -> Router {
         .route("/search", get(search_song_handler))
         .route("/game/:game", put(start_game))
         .route("/game/stop", put(stop_game))
+        .route("/game/:game", get(get_game_art))
         .layer(middleware::from_fn_with_state(
             store.clone(),
             check_token_lifetime,
