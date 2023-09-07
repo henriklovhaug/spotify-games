@@ -25,9 +25,7 @@ pub async fn stop_game(State(store): State<Store>) -> StatusCode {
     StatusCode::OK
 }
 
-pub async fn get_game_art(
-    Path(game): Path<Games>,
-) -> Result<Json<Song>, StatusCode> {
+pub async fn get_game_art(Path(game): Path<Games>) -> Result<Json<Song>, StatusCode> {
     let song = if let Some(song) = SINGLE_GAME_INFO.get(&game) {
         song
     } else {
