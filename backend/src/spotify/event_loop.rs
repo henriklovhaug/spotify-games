@@ -25,10 +25,7 @@ async fn save_immediate_song(
     if *enqueue_time + Duration::seconds(ADD_TO_QUEUE_THRESHOLD) > Utc::now() {
         match current_song {
             Some(song) => {
-                store
-                    .get_writable_song_queue()
-                    .await
-                    .push_front(song.into());
+                store.add_song_to_queue_front(song.into()).await;
                 true
             }
             None => false,
