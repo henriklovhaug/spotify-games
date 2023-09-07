@@ -77,6 +77,19 @@ impl CurrentSong {
     }
 }
 
+impl Into<Song> for CurrentSong {
+    fn into(self) -> Song {
+        Song::new(
+            self.id,
+            self.name,
+            self.artist,
+            self.album,
+            self.duration,
+            None
+        )
+    }
+}
+
 #[derive(Debug, Clone, Copy, PartialEq)]
 pub enum SpotifyActivity {
     Music,

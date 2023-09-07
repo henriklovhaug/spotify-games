@@ -1,4 +1,4 @@
-use chrono::{Duration, Utc};
+use chrono::{Duration, Utc, DateTime};
 use tokio::time::sleep;
 
 use crate::{
@@ -14,13 +14,28 @@ use super::{
         opus::play_opus, palmerna::play_palmerna, rattling_bog::play_rattling_bog,
         six_minutes::play_sixminutes,
     },
-    types::Games,
+    types::{Games, CurrentSong},
 };
 
 const ADD_TO_QUEUE_THRESHOLD: i64 = 10;
 
+async fn save_immediate_song(enqueue_time: DateTime<Utc>, current_song: Option<CurrentSong>, store: &Store) {
+    if enqueue_time + Duration::seconds(9) < Utc::now() {
+        match current_song {
+            Some(song) => {
+                store
+                    .get_writable_song_queue()
+                    .await
+                    .push_front(song.into());
+            }
+            None => {}
+        }
+    }
+}
+
 pub async fn spotify_loop(store: Store) {
     let mut enqueue_time = Utc::now();
+    let mut current_song = None;
     loop {
         sleep(Duration::seconds(1).to_std().unwrap()).await;
         let gamestate = store.get_activity().await;
@@ -41,24 +56,35 @@ pub async fn spotify_loop(store: Store) {
                         if let Err(e) = add_song_to_spotify_queue(next_song, &store).await {
                             println!("Error adding song to queue: {}", e);
                         }
+                        current_song = Some(song);
                         enqueue_time = Utc::now();
                     }
                 }
             }
             // Games need to handle their own amount of time
             SpotifyActivity::Game(game) => match game {
-                Games::SixMinutes => play_sixminutes(&store).await,
+                Games::SixMinutes => {
+                    save_immediate_song(enqueue_time, current_song, &store).await;
+                    current_song = None;
+                    play_sixminutes(&store).await
+                }
                 Games::RattlingBog => {
+                    save_immediate_song(enqueue_time, current_song, &store).await;
+                    current_song = None;
                     if let Err(e) = play_rattling_bog(&store).await {
                         println!("Error playing rattling bog: {}", e);
                     }
                 }
                 Games::Opus => {
+                    save_immediate_song(enqueue_time, current_song, &store).await;
+                    current_song = None;
                     if let Err(e) = play_opus(&store).await {
                         println!("Error playing opus: {}", e);
                     }
                 }
                 Games::Palmerna => {
+                    save_immediate_song(enqueue_time, current_song, &store).await;
+                    current_song = None;
                     if let Err(e) = play_palmerna(&store).await {
                         println!("Error playing palmerna: {}", e);
                     }
