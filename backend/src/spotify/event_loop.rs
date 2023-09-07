@@ -10,7 +10,7 @@ use crate::{
 };
 
 use super::{
-    game::{opus::play_opus, rattling_bog::play_rattling_bog, six_minutes::play_sixminutes},
+    game::{opus::play_opus, rattling_bog::play_rattling_bog, six_minutes::play_sixminutes, palmerna::play_palmerna},
     types::Games,
 };
 
@@ -53,6 +53,11 @@ pub async fn spotify_loop(store: Store) {
                 Games::Opus => {
                     if let Err(e) = play_opus(&store).await {
                         println!("Error playing opus: {}", e);
+                    }
+                }
+                Games::Palmerna => {
+                    if let Err(e) = play_palmerna(&store).await {
+                        println!("Error playing palmerna: {}", e);
                     }
                 }
             },

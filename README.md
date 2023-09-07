@@ -18,3 +18,5 @@ PUBLIC_BACKEND_URL=<URI of backend>
 To add
 
 Der palmane bor
+Thunder
+

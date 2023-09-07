@@ -15,6 +15,10 @@
       name: "Opus",
       url: "Opus",
     },
+    {
+      name: "Der Palmerna bor",
+      url: "Palmerna"
+    }
   ];
 </script>
 
