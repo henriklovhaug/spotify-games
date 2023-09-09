@@ -60,7 +60,7 @@
     <h2 class="mb-2 text-center text-xl">Song Queue</h2>
     {#if data?.body}
       {#each data.body as song}
-        <div class="rounded border border-green bg-transparent m-1 p-2 text-green">
+        <div class="rounded border border-green bg-transparent mb-4 p-2 text-green">
 			<h3>{song.name}</h3>
 		</div>
       {/each}
