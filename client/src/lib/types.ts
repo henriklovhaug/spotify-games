@@ -7,6 +7,11 @@ export interface Song {
   album_url?: string;
 }
 
+export interface QueueSong {
+  name: string;
+  artist: string;
+}
+
 export interface WSMessage {
   channel: string;
   message: string;

@@ -39,6 +39,6 @@ impl ChannelMessage {
 
 #[derive(Debug, Clone, Serialize)]
 pub enum Channel {
-    Song,
+    QueueSong,
     SixMinutes,
 }

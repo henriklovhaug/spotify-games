@@ -86,6 +86,32 @@ impl From<CurrentSong> for Song {
     }
 }
 
+#[derive(Debug, Serialize)]
+pub struct QueueSong {
+    name: String,
+    artist: String,
+}
+
+impl QueueSong {
+    pub fn new(name: String, artist: String) -> QueueSong {
+        QueueSong { name, artist }
+    }
+
+    pub fn get_artist(&self) -> &str {
+        &self.artist
+    }
+
+    pub fn get_name(&self) -> &str {
+        &self.name
+    }
+}
+
+impl From<Song> for QueueSong {
+    fn from(val: Song) -> Self {
+        QueueSong::new(val.name, val.artist)
+    }
+}
+
 #[derive(Debug, Clone, Copy, PartialEq)]
 pub enum SpotifyActivity {
     Music,

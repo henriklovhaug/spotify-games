@@ -113,6 +113,11 @@ impl Store {
         queue.push_back(song);
     }
 
+    pub async fn add_song_to_queue_front(&self, song: Song) {
+        let mut queue = self.song_queue.write().await;
+        queue.push_front(song);
+    }
+
     pub async fn start_game(&self, game: Games) {
         if self.get_activity().await == SpotifyActivity::Game(game) {
             return;

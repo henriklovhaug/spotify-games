@@ -4,7 +4,7 @@
 	export let data: PageData;
 </script>
 
-<div class="flex flex-col items-center">
+<div class="flex flex-col items-center h-full">
 	{#if data?.body}
 		{#each data.body as song}
 			<!-- Every songbox will add to queue when clicked on -->

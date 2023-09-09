@@ -36,7 +36,7 @@ lazy_static! {
         m.insert(
             Games::RattlingBog,
             Song::new(
-                "2vjrfvthqjw7bs8as4vdzi",
+                "2VjrFvthQjw7BS8aS4VdZi",
                 "Rattling Bog",
                 "Carlyle Fraser",
                 "Lord Of The Dance",

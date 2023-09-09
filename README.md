@@ -1,6 +1,6 @@
 # Spotify game app
 
-## Building
+## Running dev mode
 
 create .env file in the backend folder containing
 
@@ -15,8 +15,21 @@ create .env file in the frontend folder containing
 PUBLIC_BACKEND_URL=<URI of backend>
 ```
 
-To add
+Open a terminal
 
-Der palmane bor
-Thunder
+```bash
+cd backend/
+cargo r
+```
 
+Open a second terminal
+
+```bash
+cd client/
+npm ci
+npm run dev
+```
+
+## To add
+
+Make issue
