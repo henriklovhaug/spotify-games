@@ -39,7 +39,7 @@ pub async fn spotify_loop(store: Store) {
     let mut enqueue_time = Utc::now();
     let mut current_song = None;
     loop {
-        sleep(Duration::seconds(1).to_std().unwrap()).await;
+        sleep(Duration::seconds(2).to_std().unwrap()).await;
         let gamestate = store.get_activity().await;
 
         match gamestate {
