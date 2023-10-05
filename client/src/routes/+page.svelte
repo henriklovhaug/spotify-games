@@ -1,6 +1,9 @@
 <script lang="ts">
   import { enhance } from "$app/forms";
+  import SearchResults from "$lib/components/searchResults.svelte";
   import type { GameMode } from "$lib/gamemodes";
+  import type { PageData } from "./$types";
+  export let data: PageData;
 
   const games: GameMode[] = [
     {
@@ -26,8 +29,9 @@
   ];
 </script>
 
-<div class="flex flex-col items-center">
-  <div class="mt-8">
+<div class="flex items-center justify-around">
+  <div class="mt-8 self-start">
+    <h2 class="text-center text-xl">Start a Game</h2>
     <ul>
       {#each games as game}
         <li>
@@ -51,5 +55,15 @@
         </button>
       </form>
     </ul>
+  </div>
+  <div class="mt-8 flex flex-col justify-items-center self-start">
+    <h2 class="mb-2 text-center text-xl">Song Queue</h2>
+    {#if data?.body}
+      {#each data.body as song}
+        <div class="rounded border border-green bg-transparent mb-4 p-2 text-green">
+			<h3>{song.name}</h3>
+		</div>
+      {/each}
+    {/if}
   </div>
 </div>
