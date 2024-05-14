@@ -1,4 +1,5 @@
 use axum::extract::State;
+use tracing::error;
 
 use crate::{spotify::api::skip, store::Store};
 
@@ -11,7 +12,7 @@ pub async fn skip_n_tracks_handler(State(store): State<Store>, body: String) {
 
     for _ in 0..n {
         if let Err(e) = skip(&store).await {
-            println!("Error: {:?}", e);
+            error!("Error skipping track: {:?}", e);
         }
     }
 }

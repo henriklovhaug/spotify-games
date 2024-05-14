@@ -1,8 +1,7 @@
 use std::env;
 
 use axum::{
-    extract::State,
-    http::Request,
+    extract::{Request, State},
     middleware::Next,
     response::{Redirect, Response},
 };
@@ -15,10 +14,10 @@ const REDIRECT_URI: &str = "http://localhost:4000/callback";
 const SCOPE: &str =
     "user-read-private user-read-email user-read-playback-state user-modify-playback-state";
 
-pub async fn check_auth_token<T>(
+pub async fn check_auth_token(
     State(store): State<Store>,
-    request: Request<T>,
-    next: Next<T>,
+    request: Request,
+    next: Next,
 ) -> Result<Response, Redirect> {
     let token = store.get_session_token().await;
     if token.is_some() {

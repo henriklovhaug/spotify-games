@@ -1,5 +1,6 @@
 use dotenvy::dotenv;
 use std::net::SocketAddr;
+use tracing::info;
 
 use backend::{
     routes::generate_routes,
@@ -10,6 +11,8 @@ use backend::{
 #[tokio::main]
 async fn main() {
     dotenv().ok();
+
+    tracing_subscriber::fmt::init();
 
     let store = Store::default();
 
@@ -27,10 +30,10 @@ async fn main() {
 
     let routes = generate_routes(store);
 
-    let addr = "[::]:4000".parse::<SocketAddr>().unwrap();
+    let addr = SocketAddr::from(([0, 0, 0, 0], 4000));
 
-    axum::Server::bind(&addr)
-        .serve(routes.into_make_service_with_connect_info::<SocketAddr>())
-        .await
-        .unwrap();
+    let listener = tokio::net::TcpListener::bind(&addr).await.unwrap();
+
+    info!("Starting server at: {}", addr);
+    axum::serve(listener, routes).await.unwrap();
 }

@@ -3,6 +3,7 @@ use axum::{
     routing::{get, post, put},
     Router,
 };
+use tower_http::{compression::CompressionLayer, services::ServeDir};
 
 use crate::{
     middleware::{token_check::check_auth_token, token_updater::check_token_lifetime},
@@ -54,6 +55,8 @@ pub fn generate_routes(store: Store) -> Router {
         .with_state(store.clone())
         .route("/", get(index_handler))
         .nest("/sixminutes", six_minutes_routes(store))
+        .nest_service("/assets", ServeDir::new("assets"))
+        .layer(CompressionLayer::new())
 }
 
 fn six_minutes_routes(store: Store) -> Router {

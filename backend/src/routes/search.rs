@@ -1,5 +1,6 @@
 use std::error::Error;
 
+use askama::Template;
 use axum::{
     extract::{Query, State},
     Json,
@@ -20,7 +21,7 @@ const URL: &str = "https://api.spotify.com/v1/search?type=track&limit=8&q=";
 pub async fn search_song_handler(
     State(store): State<Store>,
     Query(param): Query<Params>,
-) -> Result<Json<Vec<Song>>, String> {
+) -> Result<SearchTemplate, String> {
     let search_str = format!("{}{}", URL, param.search);
     let token = store
         .get_session_token()
@@ -30,7 +31,9 @@ pub async fn search_song_handler(
     let songs = search(&search_str, &token)
         .await
         .map_err(|err| format!("Could not finish request: {}", err))?;
-    Ok(Json(songs))
+    Ok(SearchTemplate {
+        names: songs.iter().map(|song| song.name.clone()).collect(),
+    })
 }
 
 async fn search(search_str: &str, auth: &str) -> Result<Vec<Song>, Box<dyn Error>> {
@@ -57,4 +60,10 @@ async fn parse_response(response: Response) -> Result<Vec<Song>, Box<dyn Error>>
         songs.push(song);
     }
     Ok(songs)
+}
+
+#[derive(Template)]
+#[template(path = "search.html")]
+pub struct SearchTemplate {
+    names: Vec<String>,
 }

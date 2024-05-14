@@ -1,5 +1,6 @@
 use chrono::{DateTime, Duration, Utc};
 use tokio::time::sleep;
+use tracing::info;
 
 use crate::{
     spotify::{
@@ -41,6 +42,7 @@ pub async fn spotify_loop(store: Store) {
     loop {
         sleep(Duration::seconds(2).to_std().unwrap()).await;
         let gamestate = store.get_activity().await;
+
 
         match gamestate {
             SpotifyActivity::Music => {

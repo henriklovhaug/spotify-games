@@ -1,11 +1,15 @@
-use axum::{extract::State, http::Request, middleware::Next, response::Response};
+use axum::{
+    extract::{Request, State},
+    middleware::Next,
+    response::Response,
+};
 
 use crate::{spotify::token::refresh_token, store::Store};
 
-pub async fn check_token_lifetime<T>(
+pub async fn check_token_lifetime(
     State(store): State<Store>,
-    request: Request<T>,
-    next: Next<T>,
+    request: Request,
+    next: Next,
 ) -> Response {
     if !store.valid_token().await {
         if let Some(token) = store.get_token().await.as_ref() {

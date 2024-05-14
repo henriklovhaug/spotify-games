@@ -5,10 +5,9 @@ use axum::{
         ws::{Message, WebSocket},
         ConnectInfo, State, WebSocketUpgrade,
     },
-    headers::UserAgent,
     response::IntoResponse,
-    TypedHeader,
 };
+use axum_extra::{headers::UserAgent, TypedHeader};
 use futures::{sink::SinkExt, stream::StreamExt};
 
 use crate::store::Store;
@@ -77,6 +76,6 @@ async fn handle_socket(socket: WebSocket, who: SocketAddr, store: Store) {
         }
     }
 
-    // returning from the handler closes the websocket connection
+    // returning from the handler closes the WebSocket connection
     println!("Websocket context {} destroyed", who);
 }

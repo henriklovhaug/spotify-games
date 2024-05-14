@@ -6,6 +6,7 @@ use tokio::{
     fs::File,
     io::{AsyncReadExt, AsyncWriteExt},
 };
+use tracing::{error, info};
 
 use crate::{
     spotify::response_types::LoginResponse,
@@ -38,9 +39,9 @@ pub async fn login(store: &Store, code: String) -> Result<(), Box<dyn Error>> {
         .await?;
 
     if response.status().is_success() {
-        println!("Log in successfull");
+        info!("Log in successfull");
     } else {
-        println!("Log in failed");
+        error!("Log in failed");
         println!("{:?}", response);
         return Err("Log in failed".into());
     }

@@ -1,4 +1,5 @@
 use serde::Deserialize;
+use tracing::info;
 
 #[derive(Debug, Deserialize)]
 pub struct LoginResponse {
@@ -19,6 +20,7 @@ impl LoginResponse {
     }
 
     pub fn set_refresh_token(&mut self, refresh_token: String) {
+        info!("Setting refresh token");
         self.refresh_token = Some(refresh_token);
     }
 }

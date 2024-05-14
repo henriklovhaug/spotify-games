@@ -1,0 +1,18 @@
+<div class="mx-4">
+    <table class="uk-table uk-table-striped">
+        <thead>
+            <tr>
+                <th class="p-2">Name</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for name in names %}
+                <tr hx-post="/queue" hx-include="this">
+                    <input type="hidden" name="kek" value="{{ name }}" />
+                    <input type="hidden" name="title" value="{{ name }}" />
+                    <td class="p-2">{{ name }}</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>

@@ -1,6 +1,9 @@
-use axum::response::Html;
+use askama::Template;
 
-pub async fn index_handler() -> Html<&'static str> {
-    let index = include_str!("../templates/index.html");
-    Html(index)
+pub async fn index_handler() -> IndexTemplate {
+    IndexTemplate {}
 }
+
+#[derive(Template)]
+#[template(path = "index.html")]
+pub struct IndexTemplate {}
