@@ -15,15 +15,14 @@ use crate::{
 };
 
 const TOKEN_URL: &str = "https://accounts.spotify.com/api/token";
-const REDIRECT_URI: &str = "http://localhost:4000/callback";
 
 pub async fn login(store: &Store, code: String) -> Result<(), Box<dyn Error>> {
+    info!("Logging in");
     let client = CLIENT.get_or_init(Client::new);
 
-    let redirect_uri = env::var("REDIRECT_URL").unwrap_or_else(|_| {
-        error!("REDIRECT_URL not set, using default");
-        REDIRECT_URI.to_string()
-    });
+    let redirect_uri = env::var("REDIRECT_URL").expect("REDIRECT_URL not set");
+
+    info!("Redirect URI: {}", redirect_uri);
 
     let params = [
         ("grant_type", "authorization_code"),
