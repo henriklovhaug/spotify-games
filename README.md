@@ -19,6 +19,7 @@ Open a terminal
 
 ```bash
 cd backend/
+./scripts/setup_js.sh
 cargo r
 ```
 
