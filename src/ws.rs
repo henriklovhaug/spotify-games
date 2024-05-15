@@ -24,7 +24,7 @@ pub async fn ws_handler(
     } else {
         String::from("Unknown browser")
     };
-    debug!("`{}` at {} connected.", user_agent, addr);
+    info!("`{}` at {} connected.", user_agent, addr);
 
     // finalize the upgrade process by returning upgrade callback.
     // we can customize the callback by sending additional info such as address.
