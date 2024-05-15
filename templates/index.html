@@ -1,16 +1,16 @@
 {% extends "base.html" %}
 {% block content %}
     <div class="flex h-screen w-full flex-col items-center justify-center gap-4">
-        <input type="text"
-               id="searchbar"
-               name="search"
-               placeholder="Search.."
-               class="uk-input w-4/6" />
-        <button type="submit"
-                id="goto"
-                class="uk-button uk-button-primary w-4/6"
-                onclick="goTo()"
-                onsubmit="goTo()">Search</button>
+        <div class="uk-card mt-4 w-4/6 uk-height-medium flex-col justify-center">
+            <div class="uk-card-header uk-text-center">
+                <div class="uk-card-title uk-text-background">Queue</div>
+            </div>
+            <div class="uk-card-body flex flex-col gap-2 uk-overflow-auto h-3/4">
+				<div hx-ext="ws" ws-connect="/ws">
+					<div id="queue" hx-get="/queue" hx-trigger="load" hx-target="this"></div>
+				</div>
+            </div>
+        </div>
         <div class="uk-card mt-4 w-4/6">
             <div class="uk-card-header uk-text-center">
                 <div class="uk-card-title uk-text-background">Games</div>
@@ -22,16 +22,16 @@
                 {% endfor %}
             </div>
         </div>
-        <div class="uk-card mt-4 w-4/6">
-            <div class="uk-card-header uk-text-center">
-                <div class="uk-card-title uk-text-background">Queue</div>
-            </div>
-            <div class="uk-card-body flex flex-col items-center gap-2">
-				<div hx-ext="ws" ws-connect="/ws">
-					<div id="queue"></div>
-				</div>
-            </div>
-        </div>
+        <input type="text"
+               id="searchbar"
+               name="search"
+               placeholder="Search.."
+               class="uk-input w-4/6" />
+        <button type="submit"
+                id="goto"
+                class="uk-button uk-button-primary w-4/6"
+                onclick="goTo()"
+                onsubmit="goTo()">Search</button>
     </div>
     <script>
   document
