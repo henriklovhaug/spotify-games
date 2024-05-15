@@ -41,7 +41,6 @@ async fn handle_socket(socket: WebSocket, who: SocketAddr, store: Store) {
 
         while let Ok(message) = rx.recv().await {
             let m = Message::Text(message);
-            info!("Sending {:?} to", m);
             if sender.send(m).await.is_err() {
                 return "kek";
             }
@@ -60,6 +59,7 @@ async fn handle_socket(socket: WebSocket, who: SocketAddr, store: Store) {
         }
         "kek"
     });
+
 
     // If any one of the tasks exit, abort the other.
     tokio::select! {
