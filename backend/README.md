@@ -23,6 +23,11 @@ RUN mv node_modules/uikit/dist/js/uikit-icons.min.js ./assets/
 While developing it would be advised to run `pnpm run watch` and
 `cargo watch -x run -w assets -w templates`
 
+> [!NOTE]
+>
+> `cargo watch` is not default and must be installed with
+> `cargo install cargo-watch`
+
 > [!TIP]
 >
 > The templating macro is set to release mode for faster recompilation, so it's
