@@ -4,6 +4,7 @@ use chrono::Duration;
 use reqwest::Client;
 use serde::Serialize;
 use tokio::time::sleep;
+use tracing::{error, info, warn};
 
 use crate::{
     spotify::{
@@ -21,7 +22,7 @@ pub async fn play_sixminutes(store: &Store) {
     }
     six_minutes_timer(store).await;
     store.end_game().await;
-    println!("Done with game");
+    info!("Done with game");
 }
 
 async fn six_minutes_timer(store: &Store) {
@@ -36,11 +37,11 @@ async fn six_minutes_timer(store: &Store) {
 
     tokio::select! {
         _r_va = &mut handle => {
-            println!("Game ended early");
+            warn!("Song ended early");
             sleep_handle.abort();
         },
         _r_vb = &mut sleep_handle => {
-            println!("Game ended on time");
+            info!("Game ended on time");
             handle.abort();
         }
     }
@@ -53,7 +54,7 @@ async fn six_minutes_timer(store: &Store) {
 async fn notify_song(store: Store) {
     loop {
         if store.get_activity().await != SpotifyActivity::Game(Games::SixMinutes) {
-            println!("Game ended");
+            info!("Game ended");
             break;
         }
         let tx = store.get_sender();
@@ -61,7 +62,7 @@ async fn notify_song(store: Store) {
         let song = match get_current_song(&store).await {
             Ok(song) => song,
             Err(e) => {
-                println!("Error getting current song: {:?}", e);
+                error!("Error getting current song: {:?}", e);
                 continue;
             }
         };
@@ -74,7 +75,7 @@ async fn notify_song(store: Store) {
         );
 
         if let Err(e) = tx.send(message) {
-            println!("Error sending message: {:?}", e);
+            error!("Error sending message: {:?}", e);
         }
     }
 }
@@ -103,7 +104,7 @@ async fn start_playlist(store: &Store) -> Result<(), Box<dyn Error>> {
         .await?;
 
     if !response.status().is_success() {
-        println!(
+        error!(
             "Error starting playlist: {:?}",
             response.text().await.unwrap()
         );

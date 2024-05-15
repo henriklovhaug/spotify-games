@@ -41,8 +41,7 @@ pub async fn login(store: &Store, code: String) -> Result<(), Box<dyn Error>> {
     if response.status().is_success() {
         info!("Log in successfull");
     } else {
-        error!("Log in failed");
-        println!("{:?}", response);
+        error!("Log in failed {:?}", response);
         return Err("Log in failed".into());
     }
 
@@ -74,10 +73,9 @@ pub async fn refresh_token(store: &Store, refresh_token: &str) -> Result<(), Box
         .await?;
 
     if response.status().is_success() {
-        println!("Refresh token successfull");
+        info!("Refresh token successfull");
     } else {
-        println!("Refresh token failed");
-        println!("{:?}", response);
+        error!("Refresh token failed {:?}", response);
         return Err("Refresh token failed".into());
     }
 
@@ -111,7 +109,7 @@ pub async fn restore_token_from_file(store: &Store) -> Result<(), Box<dyn Error>
 
     file.read_to_string(&mut contents).await?;
 
-    println!("Refresh token: {}", contents);
+    info!("Refresh token: {}", contents);
 
     refresh_token(store, &contents).await
 }

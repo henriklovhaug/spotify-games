@@ -2,7 +2,7 @@ use dotenvy::dotenv;
 use listenfd::ListenFd;
 use std::net::SocketAddr;
 use tokio::net::TcpListener;
-use tracing::info;
+use tracing::{info, warn};
 
 use backend::{
     routes::generate_routes,
@@ -19,10 +19,7 @@ async fn main() {
     let store = Store::default();
 
     if let Err(e) = restore_token_from_file(&store).await {
-        println!(
-            "Failed to restore token from file: {}\n continues server",
-            e
-        );
+        warn!("Failed to restore token from file: {}", e);
     }
 
     let store_clone = store.clone();

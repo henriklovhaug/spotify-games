@@ -3,6 +3,7 @@ use axum::{
     middleware::Next,
     response::Response,
 };
+use tracing::error;
 
 use crate::{spotify::token::refresh_token, store::Store};
 
@@ -14,7 +15,7 @@ pub async fn check_token_lifetime(
     if !store.valid_token().await {
         if let Some(token) = store.get_token().await.as_ref() {
             if let Err(e) = refresh_token(&store, &token.refresh_token()).await {
-                println!("Error refreshing token: {}", e);
+                error!("Error refreshing token: {}", e);
             }
         };
     }
