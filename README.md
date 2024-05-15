@@ -1,35 +1,35 @@
-# Spotify game app
+# Spotify games
 
-## Running dev mode
+## Setup
 
-create .env file in the backend folder containing
+Create a `.env` file with the following
 
-```bash
-SPOTIFY_CLIENT_ID=<your spotify client id>
-SPOTIFY_CLIENT_SECRET=<your spotify client secret>
+```
+SPOTIFY_CLIENT_ID=
+SPOTIFY_CLIENT_SECRET=
 ```
 
-create .env file in the frontend folder containing
+Run `pnpm i`
+
+Then move the following files
 
 ```bash
-PUBLIC_BACKEND_URL=<URI of backend>
+RUN mkdir assets
+RUN mv node_modules/htmx.org/dist/htmx.min.js ./assets/
+RUN mv node_modules/uikit/dist/js/uikit.min.js ./assets/
+RUN mv node_modules/uikit/dist/js/uikit-icons.min.js ./assets/
 ```
 
-Open a terminal
+While developing it would be advised to run `pnpm run watch` and
+`cargo watch -x run -w assets -w templates`. It may be useful to add `-w src` as
+well.
 
-```bash
-cd backend/
-cargo r
-```
+> [!NOTE]
+>
+> `cargo watch` is not default and must be installed with
+> `cargo install cargo-watch`
 
-Open a second terminal
-
-```bash
-cd client/
-npm ci
-npm run dev
-```
-
-## To add
-
-Make issue
+> [!TIP]
+>
+> The templating macro is set to release mode for faster recompilation, so it's
+> advised to run `cargo b` right after cloning the project.
