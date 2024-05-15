@@ -45,5 +45,10 @@ async fn main() {
     };
 
     info!("Starting server at: {}", addr);
-    axum::serve(listener, routes).await.unwrap();
+    axum::serve(
+        listener,
+        routes.into_make_service_with_connect_info::<SocketAddr>(),
+    )
+    .await
+    .unwrap();
 }

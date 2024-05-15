@@ -6,6 +6,7 @@ use axum::{
 use tower_http::{
     compression::CompressionLayer,
     services::{ServeDir, ServeFile},
+    trace::{DefaultMakeSpan, TraceLayer},
 };
 
 use crate::{
@@ -61,6 +62,10 @@ pub fn generate_routes(store: Store) -> Router {
         .nest("/sixminutes", six_minutes_routes(store))
         .nest_service("/assets", ServeDir::new("assets"))
         .layer(CompressionLayer::new())
+        .layer(
+            TraceLayer::new_for_http()
+                .make_span_with(DefaultMakeSpan::default().include_headers(true)),
+        )
 }
 
 fn six_minutes_routes(store: Store) -> Router {
