@@ -9,7 +9,7 @@ use axum::{
 };
 use axum_extra::{headers::UserAgent, TypedHeader};
 use futures::{sink::SinkExt, stream::StreamExt};
-use tracing::{error, info, debug};
+use tracing::{error, info};
 
 use crate::store::Store;
 
