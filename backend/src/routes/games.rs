@@ -1,8 +1,10 @@
+use askama::Template;
 use axum::{
     extract::{Path, State},
     http::StatusCode,
     Json,
 };
+use tracing::info;
 
 use crate::{
     spotify::{
@@ -14,10 +16,15 @@ use crate::{
 
 pub mod six_minutes;
 
-pub async fn start_game(State(store): State<Store>, Path(game): Path<Games>) -> StatusCode {
-    println!("Starting game: {:?}", game);
+pub async fn start_game(
+    State(store): State<Store>,
+    Path(game): Path<Games>,
+) -> GameResponseTemplate {
+    info!("Starting game: {}", game);
     store.start_game(game).await;
-    StatusCode::OK
+    GameResponseTemplate {
+        game: game.to_string(),
+    }
 }
 
 pub async fn stop_game(State(store): State<Store>) -> StatusCode {
@@ -33,4 +40,10 @@ pub async fn get_game_art(Path(game): Path<Games>) -> Result<Json<Song>, StatusC
     };
 
     Ok(Json(song.clone()))
+}
+
+#[derive(Template)]
+#[template(path = "comp/game_started.html")]
+pub struct GameResponseTemplate {
+    pub game: String,
 }

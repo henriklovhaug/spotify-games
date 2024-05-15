@@ -21,7 +21,8 @@ RUN mv node_modules/uikit/dist/js/uikit-icons.min.js ./assets/
 ```
 
 While developing it would be advised to run `pnpm run watch` and
-`cargo watch -x run -w assets -w templates`
+`cargo watch -x run -w assets -w templates`. It may be useful to add `-w src` as
+well.
 
 > [!NOTE]
 >

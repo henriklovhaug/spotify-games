@@ -1,0 +1,20 @@
+<!-- This is a button toggling the modal -->
+<button class="uk-button uk-button-default w-4/6"
+        id="{{ game.target }}"
+        type="button"
+        uk-toggle="target: #{{ game.id }}">{{ game.name }}</button>
+<!-- This is the modal -->
+<div class="uk-modal p-6" id="{{ game.id }}" uk-modal>
+    <div class="uk-modal-body uk-modal-dialog space-y-6">
+        <h2 class="uk-modal-title">{{ game.name }}</h2>
+        <p class="uk-text-center">
+            <button class="uk-modal-close uk-button uk-button-default mr-2" type="button">Cancel</button>
+            <button hx-put="/game{{ game.url }}"
+                    hx-swap="outerHTML"
+                    hx-target="#{{ game.target }}"
+                    hx-confirm="Are you sure you want to play {{ game.name }}?"
+                    class="uk-modal-close uk-button uk-button-primary"
+                    type="button">Play</button>
+        </p>
+    </div>
+</div>

@@ -1,3 +1,5 @@
+use std::fmt::{self, Display, Formatter};
+
 use chrono::Duration;
 use serde::{Deserialize, Serialize};
 
@@ -125,4 +127,20 @@ pub enum Games {
     Opus,
     Palmerna,
     Thunder,
+}
+
+impl Display for Games {
+    fn fmt(&self, f: &mut Formatter) -> fmt::Result {
+        write!(
+            f,
+            "{}",
+            match self {
+                Games::SixMinutes => "Six Minutes",
+                Games::RattlingBog => "Rattling Bog",
+                Games::Opus => "Opus",
+                Games::Palmerna => "Palmerna",
+                Games::Thunder => "Thunder",
+            }
+        )
+    }
 }

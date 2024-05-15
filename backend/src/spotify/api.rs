@@ -11,7 +11,6 @@ use super::types::{CurrentSong, Song};
 const CURRENTLY_PLAYING_URL: &str = "https://api.spotify.com/v1/me/player/currently-playing";
 
 pub async fn get_current_song(store: &Store) -> Result<CurrentSong, Box<dyn Error>> {
-    info!("Getting current song");
     let client = CLIENT.get_or_init(Client::new);
 
     let token = store.try_get_session_token().await?;
@@ -34,7 +33,6 @@ pub async fn get_current_song(store: &Store) -> Result<CurrentSong, Box<dyn Erro
 }
 
 async fn parse_response_current_song(response: Response) -> Result<CurrentSong, Box<dyn Error>> {
-    info!("Parsing response from spotify");
     let v: Value = serde_json::from_str(&response.text().await?)?;
 
     let f = || "error parsing response from spotify";

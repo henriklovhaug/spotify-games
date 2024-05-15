@@ -1,6 +1,6 @@
 {% extends "base.html" %}
 {% block content %}
-    <div class="flex h-screen w-full flex-col items-center justify-center gap-2">
+    <div class="flex h-screen w-full flex-col items-center justify-center gap-4">
         <input type="text"
                id="searchbar"
                name="search"
@@ -8,9 +8,20 @@
                class="uk-input w-4/6" />
         <button type="submit"
                 id="goto"
-                class="uk-button uk-button-primary"
+                class="uk-button uk-button-primary w-4/6"
                 onclick="goTo()"
                 onsubmit="goTo()">Submit</button>
+        <div class="uk-card mt-4 w-4/6">
+            <div class="uk-card-header uk-text-center">
+                <div class="uk-card-title uk-text-background">Games</div>
+            </div>
+            <div class="uk-card-body flex flex-col items-center gap-2">
+                <!-- These are the game buttons/modals -->
+                {% for game in games %}
+                    {% include "comp/game_modal.html" %}
+                {% endfor %}
+            </div>
+        </div>
     </div>
     <script>
   document
