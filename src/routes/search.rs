@@ -3,7 +3,7 @@ use std::error::Error;
 use askama::Template;
 use axum::extract::{Query, State};
 use reqwest::{Client, Response};
-use serde::{Deserialize, Serialize};
+use serde::Deserialize;
 use serde_json::Value;
 
 use crate::{spotify::types::Song, store::Store, CLIENT};
@@ -55,23 +55,6 @@ async fn parse_response(response: Response) -> Result<Vec<Song>, Box<dyn Error>>
         songs.push(song);
     }
     Ok(songs)
-}
-
-#[derive(Serialize, Debug)]
-pub struct RenderSong {
-    pub name: String,
-    pub artist: String,
-    pub id: String,
-}
-
-impl From<Song> for RenderSong {
-    fn from(value: Song) -> Self {
-        RenderSong {
-            name: value.name,
-            artist: value.artist,
-            id: value.id,
-        }
-    }
 }
 
 #[derive(Template)]

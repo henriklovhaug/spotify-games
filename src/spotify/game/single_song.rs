@@ -1,5 +1,7 @@
 use std::error::Error;
 
+use tracing::error;
+
 use crate::{
     spotify::{
         api::{add_song_to_spotify_queue, skip},
@@ -15,6 +17,7 @@ pub async fn play_single_song_game(store: &Store, game: Games) -> Result<(), Box
     let song = if let Some(song) = SINGLE_GAME_INFO.get(&game) {
         song
     } else {
+        error!("Game not found");
         return Err("Game not found".into());
     };
 
