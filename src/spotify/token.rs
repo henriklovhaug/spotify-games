@@ -20,10 +20,12 @@ const REDIRECT_URI: &str = "http://localhost:4000/callback";
 pub async fn login(store: &Store, code: String) -> Result<(), Box<dyn Error>> {
     let client = CLIENT.get_or_init(Client::new);
 
+    let redirect_uri = env::var("REDIRECT_URL").unwrap_or_else(|_| REDIRECT_URI.to_string());
+
     let params = [
         ("grant_type", "authorization_code"),
         ("code", &code),
-        ("redirect_uri", REDIRECT_URI),
+        ("redirect_uri", &redirect_uri),
     ];
 
     let client_id = env::var("SPOTIFY_CLIENT_ID").expect("SPOTIFY_CLIENT_ID not set");
