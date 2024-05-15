@@ -53,6 +53,13 @@ RUN pnpx tailwindcss build -i ./style/main.css -o ./assets/main.css --minify
 
 
 ADD Cargo.toml Cargo.lock ./
+
+RUN echo "fn main() {println!(\"if you see this, the build broke\")}" > dummy.rs
+RUN sed -i 's/src\/main.rs/dummy.rs/g' Cargo.toml
+RUN cargo build  --locked --release
+RUN sed -i 's/dummy.rs/src\/main.rs/g' Cargo.toml
+
+
 ADD src ./src
 
 RUN  cargo build --locked --release && \
