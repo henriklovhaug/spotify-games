@@ -12,7 +12,7 @@ use crate::{
         types::{Games, SpotifyActivity},
     },
     store::Store,
-    Channel, ChannelMessage, CLIENT,
+    CLIENT,
 };
 
 pub async fn play_sixminutes(store: &Store) {
@@ -58,14 +58,13 @@ async fn notify_song(store: Store) {
         }
         let tx = store.get_sender();
         sleep(Duration::seconds(1).to_std().unwrap()).await;
-        let song = match get_current_song(&store).await {
+        let _song = match get_current_song(&store).await {
             Ok(song) => song,
             Err(e) => {
                 error!("Error getting current song: {:?}", e);
                 continue;
             }
         };
-
 
         if let Err(e) = tx.send("PUT YOUR STUFF HERE".into()) {
             println!("Error sending message: {:?}", e);

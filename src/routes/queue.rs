@@ -1,5 +1,7 @@
+use std::collections::VecDeque;
+
 use askama::Template;
-use axum::{extract::State, Form, Json};
+use axum::{extract::State, Form};
 
 use crate::{spotify::types::Song, store::Store};
 
@@ -11,9 +13,9 @@ pub async fn add_to_queue_handler(
     AddedSongTemplate {}
 }
 
-pub async fn get_queue_handler(State(store): State<Store>) -> Json<Vec<Song>> {
+pub async fn get_queue_handler(State(store): State<Store>) -> SongQueueTemplate {
     let queue = store.get_song_queue().await.to_owned();
-    Json(queue.into())
+    SongQueueTemplate::new(queue)
 }
 
 #[derive(Template)]
@@ -27,9 +29,9 @@ pub struct SongQueueTemplate {
 }
 
 impl SongQueueTemplate {
-    pub fn new(songs: Vec<Song>) -> Self {
+    pub fn new(songs: VecDeque<Song>) -> Self {
         SongQueueTemplate {
-            songs
+            songs: songs.into_iter().collect()
         }
     }
 }
