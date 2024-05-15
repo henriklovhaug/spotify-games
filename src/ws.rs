@@ -60,7 +60,6 @@ async fn handle_socket(socket: WebSocket, who: SocketAddr, store: Store) {
         "kek"
     });
 
-
     // If any one of the tasks exit, abort the other.
     tokio::select! {
         rv_a = (&mut send_task) => {

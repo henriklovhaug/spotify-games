@@ -41,5 +41,5 @@ impl ChannelMessage {
 pub enum Channel {
     QueueSong,
     SixMinutes,
-    QueueList
+    QueueList,
 }
