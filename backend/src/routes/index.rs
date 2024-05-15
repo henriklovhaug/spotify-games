@@ -1,11 +1,9 @@
 use askama::Template;
 
-pub async fn index_handler() -> IndexTemplate<'static> {
-    IndexTemplate { search: "" }
+pub async fn index_handler() -> IndexTemplate {
+    IndexTemplate {}
 }
 
 #[derive(Template)]
 #[template(path = "index.html")]
-pub struct IndexTemplate<'a> {
-    search: &'a str,
-}
+pub struct IndexTemplate {}
