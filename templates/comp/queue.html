@@ -1,18 +1,7 @@
-<div id="queue" class="mx-4 mt-4 w-dvw">
-    <table class="uk-table uk-table-striped mx-4 w-11/12">
-        <thead>
-            <tr>
-                <th class="p-2">Title</th>
-                <th class="uk-text-right p-2">Artist</th>
-            </tr>
-        </thead>
-        <tbody>
-            {% for song in songs %}
-                <tr>
-                    <td class="p-2">{{ song.name }}</td>
-                    <td class="p-2 text-right">{{ song.artist }}</td>
-                </tr>
-            {% endfor %}
-        </tbody>
-    </table>
+<div id="queue" class="flex justify-center">
+	<ul class="uk-list uk-list-divider uk-list-primary w-full">
+	{% for song in songs %}
+			<li class="uk-text-default uk-text-truncate">{{ song.name }}</li>
+	{% endfor %}
+	</ul>
 </div>

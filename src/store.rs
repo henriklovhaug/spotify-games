@@ -158,9 +158,9 @@ impl Store {
         self.tx.to_owned()
     }
 
-    async fn push_queue_changes(&self) {
+    pub async fn push_queue_changes(&self) {
         let value = SongQueueTemplate::new(
-            self.get_song_queue().await.iter().map(|s| s.to_owned()).collect(),
+            self.get_song_queue().await,
         );
         let r = self.get_sender().send(value.to_string());
         info!("Pushing queue changes {:?}", r);
