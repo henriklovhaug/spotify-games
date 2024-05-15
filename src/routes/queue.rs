@@ -1,20 +1,13 @@
 use askama::Template;
 use axum::{extract::State, Form, Json};
 
-use crate::{
-    spotify::types::Song,
-    store::Store,
-};
+use crate::{spotify::types::Song, store::Store};
 
 pub async fn add_to_queue_handler(
     State(store): State<Store>,
     Form(track): Form<Song>,
 ) -> AddedSongTemplate {
     store.add_song_to_queue(track.clone()).await;
-    let sender = store.get_sender();
-    let name = track.name;
-    let artist = track.artist;
-    let _ = sender.send(format!("<div id=\"queue\"><p>{}: {}</p></div>", artist, name));
     AddedSongTemplate {}
 }
 
@@ -26,3 +19,17 @@ pub async fn get_queue_handler(State(store): State<Store>) -> Json<Vec<Song>> {
 #[derive(Template)]
 #[template(path = "comp/added_song.html")]
 pub struct AddedSongTemplate {}
+
+#[derive(Template)]
+#[template(path = "comp/queue.html")]
+pub struct SongQueueTemplate {
+    songs: Vec<Song>,
+}
+
+impl SongQueueTemplate {
+    pub fn new(songs: Vec<Song>) -> Self {
+        SongQueueTemplate {
+            songs
+        }
+    }
+}

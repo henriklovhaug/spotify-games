@@ -31,7 +31,7 @@ mod currently_playing;
 mod games;
 mod index;
 mod pause;
-mod queue;
+pub mod queue;
 mod search;
 mod skip;
 
