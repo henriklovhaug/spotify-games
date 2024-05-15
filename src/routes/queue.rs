@@ -1,5 +1,5 @@
 use askama::Template;
-use axum::{extract::State, Form, Json};
+use axum::{extract::State, Form};
 
 use crate::{spotify::types::Song, store::Store};
 

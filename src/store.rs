@@ -8,7 +8,7 @@ use tokio::sync::{
 use tracing::info;
 
 use crate::{
-    routes::queue::{self, SongQueueTemplate},
+    routes::queue::SongQueueTemplate,
     spotify::{
         response_types::LoginResponse,
         types::{Games, Song, SpotifyActivity},
@@ -111,16 +111,16 @@ impl Store {
 
     pub async fn add_song_to_queue(&self, song: Song) {
         {
-        let mut queue = self.song_queue.write().await;
-        queue.push_back(song);
+            let mut queue = self.song_queue.write().await;
+            queue.push_back(song);
         }
         self.push_queue_changes().await;
     }
 
     pub async fn add_song_to_queue_front(&self, song: Song) {
         {
-        let mut queue = self.song_queue.write().await;
-        queue.push_front(song);
+            let mut queue = self.song_queue.write().await;
+            queue.push_front(song);
         }
         self.push_queue_changes().await;
     }
@@ -158,10 +158,8 @@ impl Store {
         self.tx.to_owned()
     }
 
-    async fn push_queue_changes(&self) {
-        let value = SongQueueTemplate::new(
-            self.get_song_queue().await.iter().map(|s| s.to_owned()).collect(),
-        );
+    pub async fn push_queue_changes(&self) {
+        let value = SongQueueTemplate::new(self.get_song_queue().await);
         let r = self.get_sender().send(value.to_string());
         info!("Pushing queue changes {:?}", r);
     }
