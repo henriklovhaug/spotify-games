@@ -7,6 +7,7 @@ Create a `.env` file with the following
 ```
 SPOTIFY_CLIENT_ID=
 SPOTIFY_CLIENT_SECRET=
+REDIRECT_URL=http://localhost:4000/callback
 ```
 
 Run `pnpm i`
