@@ -22,13 +22,13 @@ RUN mv node_modules/uikit/dist/js/uikit-icons.min.js ./assets/
 ```
 
 While developing it would be advised to run `pnpm run watch` and
-`cargo watch -x run -w assets -w templates`. It may be useful to add `-w src` as
-well.
+`systemfs --no-pid -s http:4000 -- cargo watch -x run -w assets -w templates`.
+It may be useful to add `-w src` as well.
 
 > [!NOTE]
 >
-> `cargo watch` is not default and must be installed with
-> `cargo install cargo-watch`
+> `cargo watch` and `systemfs` is not default and must be installed with
+> `cargo install cargo-watch systemfs`
 
 > [!TIP]
 >
