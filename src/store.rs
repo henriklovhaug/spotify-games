@@ -5,6 +5,7 @@ use tokio::sync::{
     broadcast::{self, Receiver, Sender},
     OwnedRwLockReadGuard, RwLock, RwLockWriteGuard,
 };
+use tracing::info;
 
 use crate::{
     spotify::{
@@ -54,7 +55,7 @@ impl Store {
 
     pub async fn set_token(&self, token: Token) {
         let mut session_token = self.session_token.write().await;
-        println!("Setting token: {:?}", token);
+        info!("Setting token: {:?}", token);
         *session_token = Some(token);
     }
 

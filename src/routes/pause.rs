@@ -2,6 +2,7 @@ use axum::extract::State;
 use axum::http::StatusCode;
 use reqwest::header::{AUTHORIZATION, CONTENT_LENGTH};
 use reqwest::Client;
+use tracing::error;
 
 use crate::store::Store;
 use crate::CLIENT;
@@ -23,7 +24,7 @@ pub async fn pause_music_handler(State(store): State<Store>) -> StatusCode {
 
     if !response.status().is_success() {
         let body = response.text().await.unwrap();
-        println!("Pause music failed {:?}", body);
+        error!("Pause music failed {:?}", body);
         return StatusCode::INTERNAL_SERVER_ERROR;
     }
 

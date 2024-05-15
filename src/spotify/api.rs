@@ -2,7 +2,7 @@ use std::error::Error;
 
 use reqwest::{header::CONTENT_LENGTH, Client, Response};
 use serde_json::Value;
-use tracing::info;
+use tracing::{error, info};
 
 use crate::{store::Store, CLIENT};
 
@@ -22,7 +22,7 @@ pub async fn get_current_song(store: &Store) -> Result<CurrentSong, Box<dyn Erro
         .await?;
 
     if !response.status().is_success() {
-        println!(
+        error!(
             "Error getting current song: {:?}",
             response.text().await.unwrap()
         );
@@ -75,7 +75,7 @@ pub async fn add_song_to_spotify_queue(song: Song, store: &Store) -> Result<(), 
 
     if !response.status().is_success() {
         let body = response.text().await?;
-        println!("Added song to queue {:?}", body);
+        error!("Error adding song to queue {:?}", body);
         return Err("Error adding song to queue".into());
     }
 
@@ -103,9 +103,9 @@ pub async fn skip(store: &Store) -> Result<(), Box<dyn Error>> {
         .await?;
 
     if !response.status().is_success() {
-        println!("Skip music failed {:?}", response.status());
+        error!("Skip music failed {:?}", response.status());
         let body = response.text().await?;
-        println!("Skip music failed {:?}", body);
+        error!("Skip music failed {:?}", body);
         return Err("Skip music failed".into());
     }
 
