@@ -34,6 +34,7 @@ RUN mkdir assets
 RUN mv node_modules/htmx.org/dist/htmx.min.js ./assets/
 RUN mv node_modules/uikit/dist/js/uikit.min.js ./assets/
 RUN mv node_modules/uikit/dist/js/uikit-icons.min.js ./assets/
+RUN mv node_modules/htmx.org/dist/ext/ws.js ./assets/
 
 RUN pnpx tailwindcss build -i ./styles/tailwind.css -o ./assets/main.css --minify
 
