@@ -9,7 +9,7 @@ use axum::{
 };
 use axum_extra::{headers::UserAgent, TypedHeader};
 use futures::{sink::SinkExt, stream::StreamExt};
-use tracing::{error, info};
+use tracing::{error, info, debug};
 
 use crate::store::Store;
 
@@ -24,7 +24,7 @@ pub async fn ws_handler(
     } else {
         String::from("Unknown browser")
     };
-    info!("`{}` at {} connected.", user_agent, addr);
+    debug!("`{}` at {} connected.", user_agent, addr);
 
     // finalize the upgrade process by returning upgrade callback.
     // we can customize the callback by sending additional info such as address.
@@ -40,8 +40,9 @@ async fn handle_socket(socket: WebSocket, who: SocketAddr, store: Store) {
         let mut rx = store.get_receiver();
 
         while let Ok(message) = rx.recv().await {
-            let serialized = serde_json::to_string(&message).unwrap();
-            if sender.send(Message::Text(serialized)).await.is_err() {
+            let m = Message::Text(message);
+            info!("Sending {:?} to", m);
+            if sender.send(m).await.is_err() {
                 return "kek";
             }
         }

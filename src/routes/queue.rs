@@ -2,9 +2,8 @@ use askama::Template;
 use axum::{extract::State, Form, Json};
 
 use crate::{
-    spotify::types::{QueueSong, Song},
+    spotify::types::Song,
     store::Store,
-    Channel, ChannelMessage,
 };
 
 pub async fn add_to_queue_handler(
@@ -13,14 +12,9 @@ pub async fn add_to_queue_handler(
 ) -> AddedSongTemplate {
     store.add_song_to_queue(track.clone()).await;
     let sender = store.get_sender();
-    let queue_song: QueueSong = track.into();
-    let message = ChannelMessage::new(
-        Channel::QueueSong,
-        "".into(),
-        Some(queue_song.get_artist().into()),
-        Some(queue_song.get_name().into()),
-    );
-    let _ = sender.send(message);
+    let name = track.name;
+    let artist = track.artist;
+    let _ = sender.send(format!("<div id=\"queue\"><p>{}: {}</p></div>", artist, name));
     AddedSongTemplate {}
 }
 

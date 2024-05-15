@@ -46,8 +46,7 @@ async fn six_minutes_timer(store: &Store) {
     }
 
     let tx = store.get_sender();
-    let message = ChannelMessage::new(Channel::SixMinutes, "Game over".into(), None, None);
-    let _ = tx.send(message);
+    let _ = tx.send("PUT YOUR STUFF HERE".into());
 }
 
 async fn notify_song(store: Store) {
@@ -66,14 +65,8 @@ async fn notify_song(store: Store) {
             }
         };
 
-        let message = ChannelMessage::new(
-            Channel::SixMinutes,
-            "".into(),
-            Some(song.get_artist().into()),
-            Some(song.get_name().into()),
-        );
 
-        if let Err(e) = tx.send(message) {
+        if let Err(e) = tx.send("PUT YOUR STUFF HERE".into()) {
             println!("Error sending message: {:?}", e);
         }
     }
