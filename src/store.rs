@@ -23,7 +23,7 @@ pub struct Store {
     session_token: Arc<RwLock<Option<Token>>>,
     song_queue: Arc<RwLock<VecDeque<Song>>>,
     activity: Arc<RwLock<SpotifyActivity>>,
-    tx: Sender<ChannelMessage>,
+    tx: Sender<String>,
 }
 
 impl Default for Store {
@@ -34,7 +34,7 @@ impl Default for Store {
 }
 
 impl Store {
-    pub fn new(tx: Sender<ChannelMessage>) -> Store {
+    pub fn new(tx: Sender<String>) -> Store {
         Store {
             session_token: Arc::new(RwLock::new(None)),
             song_queue: Arc::new(RwLock::new(VecDeque::new())),
@@ -144,11 +144,11 @@ impl Store {
         self.activity.read().await.to_owned()
     }
 
-    pub fn get_receiver(&self) -> Receiver<ChannelMessage> {
+    pub fn get_receiver(&self) -> Receiver<String> {
         self.tx.subscribe()
     }
 
-    pub fn get_sender(&self) -> Sender<ChannelMessage> {
+    pub fn get_sender(&self) -> Sender<String> {
         self.tx.to_owned()
     }
 }

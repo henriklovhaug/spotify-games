@@ -22,6 +22,16 @@
                 {% endfor %}
             </div>
         </div>
+        <div class="uk-card mt-4 w-4/6">
+            <div class="uk-card-header uk-text-center">
+                <div class="uk-card-title uk-text-background">Queue</div>
+            </div>
+            <div class="uk-card-body flex flex-col items-center gap-2">
+				<div hx-ext="ws" ws-connect="/ws">
+					<div id="queue"></div>
+				</div>
+            </div>
+        </div>
     </div>
     <script>
   document
