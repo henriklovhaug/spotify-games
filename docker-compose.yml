@@ -1,19 +1,9 @@
 services:
   backend:
-    container_name: backend
+    container_name: spotify_game
     build:
-      context: backend
       dockerfile: Dockerfile
     ports:
       - 4000:4000
     env_file:
-        - backend/.env
-  client:
-    container_name: client
-    build:
-      context: client
-      dockerfile: Dockerfile
-      args:
-        PUBLIC_BACKEND_URL: backend:4000
-    ports:
-      - 3000:3000
+        - .env

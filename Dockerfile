@@ -7,7 +7,7 @@
 # Want to help us make this template better? Share your feedback here: https://forms.gle/ybq9Krt8jtBL3iCk7
 
 ARG RUST_VERSION=1.78
-ARG APP_NAME=spotify_game
+ARG APP_NAME=backend
 
 ################################################################################
 # Create a stage for building the application.
@@ -25,8 +25,10 @@ COPY pnpm-lock.yaml package.json ./
 
 COPY tailwind.config.mjs ./
 
+COPY style/favicon.ico ./style/favicon.ico
+
 ADD templates/ ./templates/
-ADD styles/ ./styles/
+ADD style/ ./style/
 
 RUN pnpm i
 
@@ -36,7 +38,8 @@ RUN mv node_modules/uikit/dist/js/uikit.min.js ./assets/
 RUN mv node_modules/uikit/dist/js/uikit-icons.min.js ./assets/
 RUN mv node_modules/htmx.org/dist/ext/ws.js ./assets/
 
-RUN pnpx tailwindcss build -i ./styles/tailwind.css -o ./assets/main.css --minify
+
+RUN pnpx tailwindcss build -i ./style/main.css -o ./assets/main.css --minify
 
 # Awesome caching strategy
 # RUN --mount=type=bind,source=src,target=src \
@@ -54,7 +57,8 @@ ADD src ./src
 
 RUN  cargo build --locked --release && \
   cp ./target/release/$APP_NAME /bin/server && \
-  cp -r ./assets /bin/assets
+  cp -r ./assets /bin/assets && \
+  cp -r ./style/ /bin/style
 
 ################################################################################
 # Create a new stage for running the application that contains the minimal
@@ -63,22 +67,11 @@ RUN  cargo build --locked --release && \
 # stage.
 FROM alpine:3.18 AS final
 
-# Create a non-privileged user that the app will run under.
-# See https://docs.docker.com/go/dockerfile-user-best-practices/
-ARG UID=10001
-RUN adduser \
-  --disabled-password \
-  --gecos "" \
-  --home "/nonexistent" \
-  --shell "/sbin/nologin" \
-  --no-create-home \
-  --uid "${UID}" \
-  appuser
-USER appuser
 
 # Copy the executable from the "build" stage.
 COPY --from=build /bin/server /bin/
 COPY --from=build /bin/assets/* /assets/
+COPY --from=build /bin/style/* /style/
 
 # Expose the port that the application listens on.
 EXPOSE 8000
