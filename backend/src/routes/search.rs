@@ -1,12 +1,9 @@
 use std::error::Error;
 
 use askama::Template;
-use axum::{
-    extract::{Query, State},
-    Json,
-};
+use axum::extract::{Query, State};
 use reqwest::{Client, Response};
-use serde::Deserialize;
+use serde::{Deserialize, Serialize};
 use serde_json::Value;
 
 use crate::{spotify::types::Song, store::Store, CLIENT};
@@ -31,9 +28,7 @@ pub async fn search_song_handler(
     let songs = search(&search_str, &token)
         .await
         .map_err(|err| format!("Could not finish request: {}", err))?;
-    Ok(SearchTemplate {
-        names: songs.iter().map(|song| song.name.clone()).collect(),
-    })
+    Ok(SearchTemplate { songs })
 }
 
 async fn search(search_str: &str, auth: &str) -> Result<Vec<Song>, Box<dyn Error>> {
@@ -62,8 +57,25 @@ async fn parse_response(response: Response) -> Result<Vec<Song>, Box<dyn Error>>
     Ok(songs)
 }
 
+#[derive(Serialize, Debug)]
+pub struct RenderSong {
+    pub name: String,
+    pub artist: String,
+    pub id: String,
+}
+
+impl From<Song> for RenderSong {
+    fn from(value: Song) -> Self {
+        RenderSong {
+            name: value.name,
+            artist: value.artist,
+            id: value.id,
+        }
+    }
+}
+
 #[derive(Template)]
 #[template(path = "search.html")]
 pub struct SearchTemplate {
-    names: Vec<String>,
+    songs: Vec<Song>,
 }

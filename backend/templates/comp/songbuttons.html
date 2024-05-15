@@ -1,0 +1,26 @@
+<div class="mx-4 w-dvw mt-4">
+    <table class="uk-table uk-table-striped mx-4 w-11/12">
+        <thead>
+            <tr>
+                <th class="p-2">Name</th>
+                <th class="uk-text-right p-2">Artist</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for song in songs %}
+                <tr hx-post="/queue" hx-include="this" hx-swap="outerHTML">
+                    <input type="hidden" name="id" value="{{ song.id }}" />
+                    <input type="hidden" name="name" value="{{ song.name }}" />
+                    <input type="hidden" name="artist" value="{{ song.artist }}" />
+                    <input type="hidden" name="album" value="{{ song.album }}" />
+                    <input type="hidden" name="duration" value="{{ song.duration }}" />
+                    <input type="hidden"
+                           name="album_url"
+                           value="{% if let Some(album_url) = song.album_url %}  {{ album_url }} {% endif %} " />
+                    <td class="p-2">{{ song.name }}</td>
+                    <td class="p-2 text-right">{{ song.artist }}</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>

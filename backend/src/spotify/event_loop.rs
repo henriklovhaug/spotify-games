@@ -1,6 +1,6 @@
 use chrono::{DateTime, Duration, Utc};
 use tokio::time::sleep;
-use tracing::info;
+use tracing::error;
 
 use crate::{
     spotify::{
@@ -43,7 +43,6 @@ pub async fn spotify_loop(store: Store) {
         sleep(Duration::seconds(2).to_std().unwrap()).await;
         let gamestate = store.get_activity().await;
 
-
         match gamestate {
             SpotifyActivity::Music => {
                 if store.view_next_song().await.is_some() {
@@ -58,7 +57,7 @@ pub async fn spotify_loop(store: Store) {
                     {
                         let next_song = store.get_next_song().await.unwrap();
                         if let Err(e) = add_song_to_spotify_queue(next_song, &store).await {
-                            println!("Error adding song to queue: {}", e);
+                            error!("Error adding song to queue: {}", e);
                         }
                         current_song = Some(song);
                         enqueue_time = Utc::now();
@@ -73,7 +72,7 @@ pub async fn spotify_loop(store: Store) {
                     play_sixminutes(&store).await;
                     if saved {
                         if let Err(e) = skip(&store).await {
-                            println!("Error skipping: {}", e);
+                            error!("Error skipping: {}", e);
                         }
                     }
                 }
@@ -81,11 +80,11 @@ pub async fn spotify_loop(store: Store) {
                     let saved = save_immediate_song(&enqueue_time, current_song, &store).await;
                     current_song = None;
                     if let Err(e) = play_single_song_game(&store, Games::RattlingBog).await {
-                        println!("Error playing rattling bog: {}", e);
+                        error!("Error playing rattling bog: {}", e);
                     }
                     if saved {
                         if let Err(e) = skip(&store).await {
-                            println!("Error skipping: {}", e);
+                            error!("Error skipping: {}", e);
                         }
                     }
                 }
@@ -93,11 +92,11 @@ pub async fn spotify_loop(store: Store) {
                     let saved = save_immediate_song(&enqueue_time, current_song, &store).await;
                     current_song = None;
                     if let Err(e) = play_single_song_game(&store, Games::Opus).await {
-                        println!("Error playing opus: {}", e);
+                        error!("Error playing opus: {}", e);
                     }
                     if saved {
                         if let Err(e) = skip(&store).await {
-                            println!("Error skipping: {}", e);
+                            error!("Error skipping: {}", e);
                         }
                     }
                 }
@@ -105,11 +104,11 @@ pub async fn spotify_loop(store: Store) {
                     let saved = save_immediate_song(&enqueue_time, current_song, &store).await;
                     current_song = None;
                     if let Err(e) = play_single_song_game(&store, Games::Palmerna).await {
-                        println!("Error playing palmerna: {}", e);
+                        error!("Error playing palmerna: {}", e);
                     }
                     if saved {
                         if let Err(e) = skip(&store).await {
-                            println!("Error skipping: {}", e);
+                            error!("Error skipping: {}", e);
                         }
                     }
                 }
@@ -117,11 +116,11 @@ pub async fn spotify_loop(store: Store) {
                     let saved = save_immediate_song(&enqueue_time, current_song, &store).await;
                     current_song = None;
                     if let Err(e) = play_single_song_game(&store, Games::Thunder).await {
-                        println!("Error playing palmerna: {}", e);
+                        error!("Error playing thunder: {}", e);
                     }
                     if saved {
                         if let Err(e) = skip(&store).await {
-                            println!("Error skipping: {}", e);
+                            error!("Error skipping: {}", e);
                         }
                     }
                 }

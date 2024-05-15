@@ -9,6 +9,7 @@ use axum::{
 };
 use axum_extra::{headers::UserAgent, TypedHeader};
 use futures::{sink::SinkExt, stream::StreamExt};
+use tracing::{error, info};
 
 use crate::store::Store;
 
@@ -23,7 +24,8 @@ pub async fn ws_handler(
     } else {
         String::from("Unknown browser")
     };
-    println!("`{user_agent}` at {addr} connected.");
+    info!("`{}` at {} connected.", user_agent, addr);
+
     // finalize the upgrade process by returning upgrade callback.
     // we can customize the callback by sending additional info such as address.
     ws.on_upgrade(move |socket| handle_socket(socket, addr, store))
@@ -62,20 +64,20 @@ async fn handle_socket(socket: WebSocket, who: SocketAddr, store: Store) {
     tokio::select! {
         rv_a = (&mut send_task) => {
             match rv_a {
-                Ok(a) => println!("{} messages sent to {}", a, who),
-                Err(a) => println!("Error sending messages {:?}", a)
+                Ok(a) => info!("Sent {} messages", a),
+                Err(a) => error!("Error sending messages {:?}", a)
             }
             recv_task.abort();
         },
         rv_b = (&mut recv_task) => {
             match rv_b {
-                Ok(b) => println!("Received {} messages", b),
-                Err(b) => println!("Error receiving messages {:?}", b)
+                Ok(b) => info!("Received {} messages", b),
+                Err(b) => error!("Error receiving messages {:?}", b)
             }
             send_task.abort();
         }
     }
 
     // returning from the handler closes the WebSocket connection
-    println!("Websocket context {} destroyed", who);
+    info!("Websocket context {} destroyed", who);
 }

@@ -3,12 +3,12 @@ use serde::{Deserialize, Serialize};
 
 #[derive(Debug, Deserialize, Serialize, Clone)]
 pub struct Song {
-    id: String,
+    pub id: String,
     pub name: String,
-    artist: String,
-    album: String,
-    duration: u32,
-    album_url: Option<String>,
+    pub artist: String,
+    pub album: String,
+    pub duration: u32,
+    pub album_url: Option<String>,
 }
 
 impl Song {

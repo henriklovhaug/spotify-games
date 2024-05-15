@@ -8,7 +8,7 @@
         <script src="/assets/htmx.min.js"></script>
         <script src="/assets/uikit.min.js"></script>
         <script src="/assets/uikit-icons.min.js"></script>
-        <script src="/assets/json-enc.js"></script>
+        <script src="/assets/path-params.js"></script>
         <script>
       // On page load or when changing themes, best to add inline in `head` to avoid FOUC
       if (
@@ -22,9 +22,9 @@
       }
         </script>
     </head>
-    <body class="m-0 bg-background p-0 dark:text-white">
+    <body class="relative m-0 bg-background p-0 dark:text-white">
         {% include "comp/toggle.html" %}
-        <div>
+        <div class="flex h-full w-full items-center justify-center">
             {% block content %}{% endblock %}
         </div>
     </body>
