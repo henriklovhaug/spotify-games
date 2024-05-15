@@ -9,10 +9,18 @@
         <button type="submit"
                 id="goto"
                 class="uk-button uk-button-primary"
-                onclick="goTo"
-                onsubmit="goTo">Submit</button>
+                onclick="goTo()"
+                onsubmit="goTo()">Submit</button>
     </div>
     <script>
+  document
+    .getElementById("searchbar")
+    .addEventListener("keyup", function (event) {
+      if (event.key === "Enter") {
+        goTo();
+      }
+    });
+
   function goTo() {
     var result = document.getElementById("searchbar").value;
     window.location.href = "/search?search=" + result;
