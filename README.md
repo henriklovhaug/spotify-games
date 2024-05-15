@@ -33,3 +33,10 @@ well.
 >
 > The templating macro is set to release mode for faster recompilation, so it's
 > advised to run `cargo b` right after cloning the project.
+
+## Contributing
+
+In any html file run the following formatter **in order**
+
+1. prettier
+2. djlint
