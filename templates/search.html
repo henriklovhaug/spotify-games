@@ -1,9 +1,9 @@
 {% extends "base.html" %}
 {% block content %}
-<div class="flex-col mt-2">
-	<div class="flex justify-end w-full">
-		<a href="/" class="m-8 uk-button uk-button-primary">Back</a>
-	</div>
-    <div class="">{% include "comp/songbuttons.html" %}</div>
-</div>
+    <div class="mt-2 flex-col">
+        <div class="flex w-full justify-end">
+            <a href="/" class="uk-button uk-button-primary m-8">Back</a>
+        </div>
+        <div class="">{% include "comp/songbuttons.html" %}</div>
+    </div>
 {% endblock content %}

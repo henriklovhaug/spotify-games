@@ -1,5 +1,7 @@
 use dotenvy::dotenv;
+use listenfd::ListenFd;
 use std::net::SocketAddr;
+use tokio::net::TcpListener;
 use tracing::info;
 
 use backend::{
@@ -31,8 +33,16 @@ async fn main() {
     let routes = generate_routes(store);
 
     let addr = SocketAddr::from(([0, 0, 0, 0], 4000));
-
-    let listener = tokio::net::TcpListener::bind(&addr).await.unwrap();
+    let mut listenfd = ListenFd::from_env();
+    let listener = match listenfd.take_tcp_listener(0).unwrap() {
+        // if we are given a tcp listener on listen fd 0, we use that one
+        Some(listener) => {
+            listener.set_nonblocking(true).unwrap();
+            TcpListener::from_std(listener).unwrap()
+        }
+        // otherwise fall back to local listening
+        None => TcpListener::bind(&addr).await.unwrap(),
+    };
 
     info!("Starting server at: {}", addr);
     axum::serve(listener, routes).await.unwrap();

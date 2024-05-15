@@ -23,6 +23,7 @@ dotenvy = "0.15.7"
 futures = "0.3.30"
 futures-util = { version = "0.3.30", features = ["sink"] }
 lazy_static = "1.4.0"
+listenfd = "1.0.1"
 rand = "0.8.5"
 reqwest = { version = "0.12.4", default-features = false, features = ["json", "rustls-tls"] }
 serde = { version = "1.0.202", features = ["derive"] }
