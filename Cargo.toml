@@ -25,7 +25,7 @@ futures-util = { version = "0.3.30", features = ["sink"] }
 lazy_static = "1.4.0"
 rand = "0.8.5"
 reqwest = { version = "0.12.4", default-features = false, features = ["json", "rustls-tls"] }
-serde = { version = "1.0.201", features = ["derive"] }
+serde = { version = "1.0.202", features = ["derive"] }
 serde_json = "1.0.117"
 tokio = { version = "1.37.0", features = ["full"] }
 tower-http = { version = "0.5.2", features = ["fs", "compression-full", "trace"] }
