@@ -15,20 +15,21 @@ Run `pnpm i`
 Then move the following files
 
 ```bash
-RUN mkdir assets
-RUN mv node_modules/htmx.org/dist/htmx.min.js ./assets/
-RUN mv node_modules/uikit/dist/js/uikit.min.js ./assets/
-RUN mv node_modules/uikit/dist/js/uikit-icons.min.js ./assets/
+mkdir assets
+mv node_modules/htmx.org/dist/htmx.min.js ./assets/
+mv node_modules/uikit/dist/js/uikit.min.js ./assets/
+mv node_modules/uikit/dist/js/uikit-icons.min.js ./assets/
+mv node_modules/htmx.org/dist/ext/ws.js ./assets/
 ```
 
 While developing it would be advised to run `pnpm run watch` and
-`cargo watch -x run -w assets -w templates`. It may be useful to add `-w src` as
-well.
+`systemfs --no-pid -s http::0.0.0.0:4000 -- cargo watch -x run -w assets -w templates`.
+It may be useful to add `-w src` as well.
 
 > [!NOTE]
 >
-> `cargo watch` is not default and must be installed with
-> `cargo install cargo-watch`
+> `cargo watch` and `systemfs` is not default and must be installed with
+> `cargo install cargo-watch systemfs`
 
 > [!TIP]
 >

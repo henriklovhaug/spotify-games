@@ -31,7 +31,7 @@ pub struct SongQueueTemplate {
 impl SongQueueTemplate {
     pub fn new(songs: VecDeque<Song>) -> Self {
         SongQueueTemplate {
-            songs: songs.into_iter().collect()
+            songs: songs.into_iter().collect(),
         }
     }
 }
