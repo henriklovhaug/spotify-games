@@ -22,17 +22,39 @@
                 {% endfor %}
             </div>
         </div>
-        <div class="flex h-1/6 w-full flex-col items-center justify-center gap-2">
-            <input type="text"
-                   id="searchbar"
-                   name="search"
-                   placeholder="Search.."
-                   class="uk-input w-4/6" />
-            <button type="submit"
-                    id="goto"
-                    class="uk-button uk-button-primary w-4/6"
-                    onclick="goTo()"
-                    onsubmit="goTo()">Search</button>
+        <div class="flex h-1/6 w-4/5 items-center justify-center gap-2">
+            <div class="flex h-full w-5/6 flex-col gap-2">
+                <input type="text"
+                       id="searchbar"
+                       name="search"
+                       placeholder="Search.."
+                       class="uk-input w-full" />
+                <button type="submit"
+                        id="goto"
+                        class="uk-button uk-button-primary w-full"
+                        onclick="goTo()"
+                        onsubmit="goTo()">Search</button>
+            </div>
+            <div class="flex h-full w-1/5 flex-col gap-2">
+                <div class="h-9"></div>
+                <!-- This is a button toggling the modal -->
+                <button class="uk-button uk-button-default w-full"
+                        id="skip_t"
+                        type="button"
+                        uk-toggle="target: #skip">Skip</button>
+                <!-- This is the modal -->
+                <div class="uk-modal p-6" id="skip" uk-modal>
+                    <div class="uk-modal-body uk-margin-auto-vertical uk-modal-dialog space-y-6">
+                        <h2 class="uk-modal-title">Are you sure you want to skip the song?</h2>
+                        <p class="uk-text-center">
+                            <button class="uk-modal-close uk-button uk-button-default mr-2" type="button">Cancel</button>
+                            <button hx-put="/skip"
+                                    class="uk-modal-close uk-button uk-button-primary"
+                                    type="button">Skip</button>
+                        </p>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
     <script>
