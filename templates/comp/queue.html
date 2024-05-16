@@ -1,7 +1,5 @@
 <div id="queue" class="flex justify-center">
-	<ul class="uk-list uk-list-divider uk-list-primary w-full">
-	{% for song in songs %}
-			<li class="uk-text-default uk-text-truncate">{{ song.name }}</li>
-	{% endfor %}
-	</ul>
+    <ul class="uk-list uk-list-primary uk-list-divider w-full">
+        {% for song in songs %}<li class="uk-text-default uk-text-truncate">{{ song.name }}</li>{% endfor %}
+    </ul>
 </div>
