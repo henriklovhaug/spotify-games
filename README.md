@@ -15,10 +15,11 @@ Run `pnpm i`
 Then move the following files
 
 ```bash
-RUN mkdir assets
-RUN mv node_modules/htmx.org/dist/htmx.min.js ./assets/
-RUN mv node_modules/uikit/dist/js/uikit.min.js ./assets/
-RUN mv node_modules/uikit/dist/js/uikit-icons.min.js ./assets/
+mkdir assets
+mv node_modules/htmx.org/dist/htmx.min.js ./assets/
+mv node_modules/uikit/dist/js/uikit.min.js ./assets/
+mv node_modules/uikit/dist/js/uikit-icons.min.js ./assets/
+mv node_modules/htmx.org/dist/ext/ws.js ./assets/
 ```
 
 While developing it would be advised to run `pnpm run watch` and
