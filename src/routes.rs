@@ -23,7 +23,7 @@ use self::{
     pause::pause_music_handler,
     queue::{add_to_queue_handler, get_queue_handler},
     search::search_song_handler,
-    skip::skip_n_tracks_handler,
+    skip::skip_n_tracks_handler, clear::clear_queue_handler,
 };
 
 mod callback;
@@ -34,9 +34,11 @@ mod pause;
 pub mod queue;
 mod search;
 mod skip;
+mod clear;
 
 pub fn generate_routes(store: Store) -> Router {
     Router::new()
+        .route("/clear", get(clear_queue_handler))
         .route("/currently_playing", get(get_currently_playing_handler))
         .route("/pause", put(pause_music_handler))
         .route("/skip", put(skip_n_tracks_handler))
