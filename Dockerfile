@@ -30,6 +30,13 @@ COPY style/favicon.ico ./style/favicon.ico
 ADD templates/ ./templates/
 ADD style/ ./style/
 
+ADD Cargo.toml Cargo.lock ./
+
+RUN echo "fn main() {println!(\"if you see this, the build broke\")}" > dummy.rs
+RUN sed -i 's/src\/main.rs/dummy.rs/g' Cargo.toml
+RUN cargo build  --locked --release
+RUN sed -i 's/dummy.rs/src\/main.rs/g' Cargo.toml
+
 RUN pnpm i
 
 RUN mkdir assets
@@ -38,27 +45,7 @@ RUN mv node_modules/uikit/dist/js/uikit.min.js ./assets/
 RUN mv node_modules/uikit/dist/js/uikit-icons.min.js ./assets/
 RUN mv node_modules/htmx.org/dist/ext/ws.js ./assets/
 
-
 RUN pnpx tailwindcss build -i ./style/main.css -o ./assets/main.css --minify
-
-# Awesome caching strategy
-# RUN --mount=type=bind,source=src,target=src \
-#   --mount=type=bind,source=Cargo.toml,target=Cargo.toml \
-#   --mount=type=bind,source=Cargo.lock,target=Cargo.lock \
-#   --mount=type=bind,source=templates,target=templates \
-#   --mount=type=bind,source=styles,target=styles \
-#   --mount=type=cache,target=/app/target/ \
-#   --mount=type=cache,target=/usr/local/cargo/git/db \
-#   --mount=type=cache,target=/usr/local/cargo/registry/ \
-
-
-ADD Cargo.toml Cargo.lock ./
-
-RUN echo "fn main() {println!(\"if you see this, the build broke\")}" > dummy.rs
-RUN sed -i 's/src\/main.rs/dummy.rs/g' Cargo.toml
-RUN cargo build  --locked --release
-RUN sed -i 's/dummy.rs/src\/main.rs/g' Cargo.toml
-
 
 ADD src ./src
 
