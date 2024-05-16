@@ -13,7 +13,7 @@ pub struct Params {
     search: String,
 }
 
-const URL: &str = "https://api.spotify.com/v1/search?type=track&limit=8&q=";
+const URL: &str = "https://api.spotify.com/v1/search?type=track&limit=16&q=";
 
 pub async fn search_song_handler(
     State(store): State<Store>,
