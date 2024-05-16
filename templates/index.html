@@ -1,12 +1,12 @@
 {% extends "base.html" %}
 {% block content %}
     <div class="flex h-dvh w-full flex-col items-center justify-evenly gap-2 py-2">
-        <div class="uk-card h-1/3 w-4/5">
+        <div class="uk-card h-1/3 w-4/5 flex-none">
             <div class="uk-card-header uk-text-center h-1/4">
                 <div class="uk-card-title uk-text-background">Queue</div>
             </div>
-            <div class="uk-card-body uk-overflow-auto h-3/4 gap-2">
-                <div hx-ext="ws" ws-connect="/ws" class="h-full">
+            <div class="uk-card-body h-3/4 w-full">
+                <div hx-ext="ws" ws-connect="/ws" class="h-full w-full">
                     <div id="queue" hx-get="/queue" hx-trigger="load" hx-swap="outerHTML"></div>
                 </div>
             </div>
