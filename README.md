@@ -22,7 +22,7 @@ RUN mv node_modules/uikit/dist/js/uikit-icons.min.js ./assets/
 ```
 
 While developing it would be advised to run `pnpm run watch` and
-`systemfs --no-pid -s http:4000 -- cargo watch -x run -w assets -w templates`.
+`systemfs --no-pid -s http::0.0.0.0:4000 -- cargo watch -x run -w assets -w templates`.
 It may be useful to add `-w src` as well.
 
 > [!NOTE]
