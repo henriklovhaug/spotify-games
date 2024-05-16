@@ -17,19 +17,19 @@ pub struct GamePlayModal<'a> {
     pub target: &'a str,
 }
 
-static GAMES: [GamePlayModal; 5] = [
+static GAMES: [GamePlayModal; 4] = [
     GamePlayModal {
         name: "Opus",
         id: "opus",
         url: "/Opus",
         target: "opus-t",
     },
-    GamePlayModal {
-        name: "Six Minutes",
-        id: "six",
-        url: "/SixMinutes",
-        target: "six-t",
-    },
+    // GamePlayModal {
+    //     name: "Six Minutes",
+    //     id: "six",
+    //     url: "/SixMinutes",
+    //     target: "six-t",
+    // },
     GamePlayModal {
         name: "Rattling Bog",
         id: "rattling",
