@@ -5,5 +5,17 @@
             <a href="/" class="uk-button uk-button-primary m-8">Back</a>
         </div>
         <div class="">{% include "comp/songbuttons.html" %}</div>
+<div class="flex h-1/6 w-full flex-col items-center justify-center gap-2">
+	<input type="text"
+		   id="searchbar"
+		   name="search"
+		   placeholder="Search.."
+		   class="uk-input w-4/6" />
+	<button type="submit"
+			id="goto"
+			class="uk-button uk-button-primary w-4/6"
+			onclick="goTo()"
+			onsubmit="goTo()">Search</button>
+</div>
     </div>
 {% endblock content %}
