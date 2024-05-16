@@ -21,6 +21,13 @@ RUN apk add --no-cache clang lld musl-dev git npm
 
 RUN npm install -g pnpm
 
+ADD Cargo.toml Cargo.lock ./
+
+RUN echo "fn main() {println!(\"if you see this, the build broke\")}" > dummy.rs
+RUN sed -i 's/src\/main.rs/dummy.rs/g' Cargo.toml
+RUN cargo build  --locked --release
+RUN sed -i 's/dummy.rs/src\/main.rs/g' Cargo.toml
+
 COPY pnpm-lock.yaml package.json ./
 
 COPY tailwind.config.mjs ./
@@ -30,12 +37,6 @@ COPY style/favicon.ico ./style/favicon.ico
 ADD templates/ ./templates/
 ADD style/ ./style/
 
-ADD Cargo.toml Cargo.lock ./
-
-RUN echo "fn main() {println!(\"if you see this, the build broke\")}" > dummy.rs
-RUN sed -i 's/src\/main.rs/dummy.rs/g' Cargo.toml
-RUN cargo build  --locked --release
-RUN sed -i 's/dummy.rs/src\/main.rs/g' Cargo.toml
 
 RUN pnpm i
 
