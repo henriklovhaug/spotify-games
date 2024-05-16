@@ -6,7 +6,7 @@ use tokio::{
     fs::File,
     io::{AsyncReadExt, AsyncWriteExt},
 };
-use tracing::{error, info};
+use tracing::{error, info, warn};
 
 use crate::{
     spotify::response_types::LoginResponse,
@@ -113,7 +113,7 @@ pub async fn restore_token_from_file(store: &Store) -> Result<(), Box<dyn Error>
 
     file.read_to_string(&mut contents).await?;
 
-    info!("Refresh token: {}", contents);
+    warn!("Restoring token from file");
 
     refresh_token(store, &contents).await
 }

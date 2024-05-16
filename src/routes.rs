@@ -17,16 +17,18 @@ use crate::{
 
 use self::{
     callback::callback_handler,
+    clear::clear_queue_handler,
     currently_playing::get_currently_playing_handler,
     games::{get_game_art, six_minutes::skip_handler, start_game, stop_game},
     index::index_handler,
     pause::pause_music_handler,
     queue::{add_to_queue_handler, get_queue_handler},
     search::search_song_handler,
-    skip::skip_n_tracks_handler, clear::clear_queue_handler,
+    skip::skip_n_tracks_handler,
 };
 
 mod callback;
+mod clear;
 mod currently_playing;
 mod games;
 mod index;
@@ -34,7 +36,6 @@ mod pause;
 pub mod queue;
 mod search;
 mod skip;
-mod clear;
 
 pub fn generate_routes(store: Store) -> Router {
     Router::new()
