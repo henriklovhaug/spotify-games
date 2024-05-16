@@ -100,8 +100,14 @@ impl Store {
     }
 
     pub async fn get_next_song(&self) -> Option<Song> {
-        let mut queue = self.song_queue.write().await;
-        queue.pop_front()
+        let song = {
+            let mut queue = self.song_queue.write().await;
+            queue.pop_front()
+        };
+
+        self.push_queue_changes().await;
+
+        song
     }
 
     pub async fn view_next_song(&self) -> Option<Song> {
