@@ -1,4 +1,6 @@
 <ul id="queue"
-    class="uk-list uk-list-primary uk-list-divider uk-overflow-auto h-5/6 w-full">
-    {% for song in songs %}<li class="uk-text-default uk-text-truncate object-contain">{{ song.name }}</li>{% endfor %}
+    class="uk-list uk-list-primary uk-list-divider m-0 h-full max-h-fit w-full overflow-y-scroll">
+    {% for song in songs %}
+        <li class="uk-text-default uk-text-truncate w-11/12 overflow-hidden">{{ song.name }}</li>
+    {% endfor %}
 </ul>
