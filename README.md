@@ -23,7 +23,7 @@ mv node_modules/htmx.org/dist/ext/ws.js ./assets/
 ```
 
 While developing it would be advised to run `pnpm run watch` and
-`systemfs --no-pid -s http::0.0.0.0:4000 -- cargo watch -x run -w assets -w templates`.
+`systemfd --no-pid -s http::0.0.0.0:4000 -- cargo watch -x run -w assets -w templates`.
 It may be useful to add `-w src` as well.
 
 > [!NOTE]
