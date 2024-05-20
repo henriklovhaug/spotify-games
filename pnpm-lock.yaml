@@ -23,8 +23,8 @@ importers:
         specifier: ^3.4.3
         version: 3.4.3
       uikit:
-        specifier: ^3.20.10
-        version: 3.20.10
+        specifier: ^3.21.0
+        version: 3.21.0
 
 packages:
   "@alloc/quick-lru@5.2.0":
@@ -812,10 +812,10 @@ packages:
         integrity: sha512-Y/arvbn+rrz3JCKl9C4kVNfTfSm2/mEp5FSz5EsZSANGPSlQrpRI5M4PKF+mJnE52jOO90PnPSc3Ur3bTQw0gA==,
       }
 
-  uikit@3.20.10:
+  uikit@3.21.0:
     resolution:
       {
-        integrity: sha512-V1wnsW2R1vLHVIfFlb93wdtJsG9B3fUJiUVijW1pi1vrD8Dhskcx+CknPrKmFGvKpYD2gdnVsTusR1DwwVIjIg==,
+        integrity: sha512-nIEjzY4NvfBwj0PTA/stghac0uLMZm7dp0QWqBW0YYVRTK1WQTayu/IY75g82+5Ruv44XAcB6T11I/k2PF0TYg==,
       }
 
   util-deprecate@1.0.2:
@@ -1252,7 +1252,7 @@ snapshots:
 
   ts-interface-checker@0.1.13: {}
 
-  uikit@3.20.10: {}
+  uikit@3.21.0: {}
 
   util-deprecate@1.0.2: {}
 
