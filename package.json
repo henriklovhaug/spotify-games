@@ -11,11 +11,11 @@
   "author": "",
   "license": "ISC",
   "devDependencies": {
-    "franken-ui": "^0.0.11",
+    "franken-ui": "^0.0.13",
     "htmx.org": "^1.9.12",
-    "prettier": "^3.2.5",
-    "prettier-plugin-tailwindcss": "^0.5.14",
-    "tailwindcss": "^3.4.3",
-    "uikit": "^3.21.0"
+    "prettier": "^3.3.1",
+    "prettier-plugin-tailwindcss": "^0.6.2",
+    "tailwindcss": "^3.4.4",
+    "uikit": "^3.21.5"
   }
 }
