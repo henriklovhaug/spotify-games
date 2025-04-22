@@ -1,7 +1,8 @@
 use askama::Template;
+use axum::response::Html;
 
-pub async fn index_handler() -> IndexTemplate<'static> {
-    IndexTemplate { games: &GAMES }
+pub async fn index_handler() -> Html<String> {
+    Html(IndexTemplate { games: &GAMES }.render().unwrap())
 }
 
 #[derive(Template)]

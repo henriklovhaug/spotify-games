@@ -40,7 +40,7 @@ async fn handle_socket(socket: WebSocket, who: SocketAddr, store: Store) {
         let mut rx = store.get_receiver();
 
         while let Ok(message) = rx.recv().await {
-            let m = Message::Text(message);
+            let m = Message::Text(message.into());
             if sender.send(m).await.is_err() {
                 return "kek";
             }

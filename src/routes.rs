@@ -46,9 +46,9 @@ pub fn generate_routes(store: Store) -> Router {
         .route("/queue", post(add_to_queue_handler))
         .route("/queue", get(get_queue_handler))
         .route("/search", get(search_song_handler))
-        .route("/game/:game", put(start_game))
+        .route("/game/", put(start_game))
         .route("/game/stop", put(stop_game))
-        .route("/game/:game", get(get_game_art))
+        .route("/game/", get(get_game_art))
         .layer(middleware::from_fn_with_state(
             store.clone(),
             check_token_lifetime,
