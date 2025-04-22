@@ -1,7 +1,10 @@
 use std::error::Error;
 
 use askama::Template;
-use axum::extract::{Query, State};
+use axum::{
+    extract::{Query, State},
+    response::Html,
+};
 use reqwest::{Client, Response};
 use serde::Deserialize;
 use serde_json::Value;
@@ -18,7 +21,7 @@ const URL: &str = "https://api.spotify.com/v1/search?type=track&limit=16&q=";
 pub async fn search_song_handler(
     State(store): State<Store>,
     Query(param): Query<Params>,
-) -> Result<SearchTemplate, String> {
+) -> Result<Html<String>, String> {
     let search_str = format!("{}{}", URL, param.search);
     let token = store
         .get_session_token()
@@ -28,7 +31,7 @@ pub async fn search_song_handler(
     let songs = search(&search_str, &token)
         .await
         .map_err(|err| format!("Could not finish request: {}", err))?;
-    Ok(SearchTemplate { songs })
+    Ok(Html(SearchTemplate { songs }.render().unwrap()))
 }
 
 async fn search(search_str: &str, auth: &str) -> Result<Vec<Song>, Box<dyn Error>> {

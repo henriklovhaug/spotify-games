@@ -2,6 +2,7 @@ use askama::Template;
 use axum::{
     extract::{Path, State},
     http::StatusCode,
+    response::Html,
     Json,
 };
 use tracing::info;
@@ -16,15 +17,16 @@ use crate::{
 
 pub mod six_minutes;
 
-pub async fn start_game(
-    State(store): State<Store>,
-    Path(game): Path<Games>,
-) -> GameResponseTemplate {
+pub async fn start_game(State(store): State<Store>, Path(game): Path<Games>) -> Html<String> {
     info!("Starting game: {}", game);
     store.start_game(game).await;
-    GameResponseTemplate {
-        game: game.to_string(),
-    }
+    Html(
+        GameResponseTemplate {
+            game: game.to_string(),
+        }
+        .render()
+        .unwrap(),
+    )
 }
 
 pub async fn stop_game(State(store): State<Store>) -> StatusCode {

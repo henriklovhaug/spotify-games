@@ -1,21 +1,21 @@
 use std::collections::VecDeque;
 
 use askama::Template;
-use axum::{extract::State, Form};
+use axum::{extract::State, response::Html, Form};
 
 use crate::{spotify::types::Song, store::Store};
 
 pub async fn add_to_queue_handler(
     State(store): State<Store>,
     Form(track): Form<Song>,
-) -> AddedSongTemplate {
+) -> Html<String> {
     store.add_song_to_queue(track.clone()).await;
-    AddedSongTemplate {}
+    Html(AddedSongTemplate {}.render().unwrap())
 }
 
-pub async fn get_queue_handler(State(store): State<Store>) -> SongQueueTemplate {
+pub async fn get_queue_handler(State(store): State<Store>) -> Html<String> {
     let queue = store.get_song_queue().await.to_owned();
-    SongQueueTemplate::new(queue)
+    Html(SongQueueTemplate::new(queue).render().unwrap())
 }
 
 #[derive(Template)]
