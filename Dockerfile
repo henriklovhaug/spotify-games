@@ -6,7 +6,7 @@
 
 # Want to help us make this template better? Share your feedback here: https://forms.gle/ybq9Krt8jtBL3iCk7
 
-ARG RUST_VERSION=1.84.0
+ARG RUST_VERSION=1.86.0
 ARG APP_NAME=backend
 
 ################################################################################
@@ -46,7 +46,8 @@ RUN mv node_modules/uikit/dist/js/uikit.min.js ./assets/
 RUN mv node_modules/uikit/dist/js/uikit-icons.min.js ./assets/
 RUN mv node_modules/htmx.org/dist/ext/ws.js ./assets/
 
-RUN pnpx tailwindcss build -i ./style/main.css -o ./assets/main.css --minify
+#RUN pnpx tailwindcss build -i ./style/main.css -o ./assets/main.css --minify
+RUN pnpm dlx @tailwindcss/cli -i style/main.css -o assets/main.css --minify
 
 ADD src ./src
 
@@ -62,6 +63,7 @@ RUN  cargo build --locked --release && \
 # stage.
 FROM alpine:3.18 AS final
 
+RUN apk add --no-cache ca-certificates curl
 
 # Copy the executable from the "build" stage.
 COPY --from=build /bin/server /bin/
@@ -69,7 +71,9 @@ COPY --from=build /bin/assets/* /assets/
 COPY --from=build /bin/style/* /style/
 
 # Expose the port that the application listens on.
-EXPOSE 8000
+EXPOSE 4000
+
+HEALTHCHECK --interval=30s --timeout=30s --start-period=5s --retries=3 CMD [ "sh", "-c", "curl -f http://localhost:4000/" ]
 
 # What the container should run when it is started.
 CMD ["/bin/server"]
